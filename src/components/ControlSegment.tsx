@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import {
     Box, Button, Flex, HStack,
-    InputGroup, Input, IconButton
+    Input, IconButton
 } from '@chakra-ui/react';
 import { FiSend } from 'react-icons/fi';
 
@@ -71,42 +71,27 @@ export default function ControlSegment({ onSelect }: { onSelect: (key: string) =
             </Flex>
 
             {/* Chat input */}
-            <InputGroup
+            <Flex
                 maxW="680px"
                 mx="auto"
                 bg="rgba(241,243,245,0.85)"
                 borderRadius="full"
-                px={3}
-                py={1}
+                px={4}
+                py={2}
                 boxShadow="0 4px 14px rgba(0,0,0,0.06)"
-                endElement={
-                    <IconButton
-                        aria-label="Send"
-                        colorPalette="blue"
-                        size="md"
-                        borderRadius="full"
-                        bgGradient="linear(to-r, teal.400, blue.500)"
-                        color="white"
-                        _hover={{ bgGradient: 'linear(to-r, teal.500, blue.600)', transform: 'translateY(-1px)' }}
-                        _active={{ transform: 'translateY(0)' }}
-                        onClick={handleSend}
-                        disabled={!input.trim()}
-                    >
-                        <FiSend />
-                    </IconButton>
-                }
+                align="center"
+                gap={2}
             >
                 <Input
                     aria-label="Chat input"
                     placeholder="Ask me anything..."
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    size="lg"
+                    size="md"
                     border="none"
                     bg="transparent"
                     borderRadius="full"
                     _focusVisible={{ boxShadow: 'none' }}
-                    pr="4.5rem"
                     fontSize="md"
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {
@@ -115,7 +100,19 @@ export default function ControlSegment({ onSelect }: { onSelect: (key: string) =
                         }
                     }}
                 />
-            </InputGroup>
+                <IconButton
+                    aria-label="Send"
+                    children={<FiSend />}
+                    colorScheme="blue"
+                    size="md"
+                    borderRadius="full"
+                    bg="blue.400"
+                    color="white"
+                    _hover={{ bg: 'blue.500' }}
+                    onClick={handleSend}
+                    disabled={!input.trim()}
+                />
+            </Flex>
         </Box>
     );
 }
