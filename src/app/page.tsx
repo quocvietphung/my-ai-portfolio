@@ -1,44 +1,52 @@
-'use client';
-
+"use client";
 import { useState } from "react";
 import ParticlesBackground from "@/components/ParticlesBackground";
 import AvatarHeader from "@/components/AvatarHeader";
-
-// Nếu chưa cần, tạm bỏ các import section khác nhé
-// import ControlSegment from "@/components/ControlSegment";
-// import SectionMe from "@/sections/SectionMe";
-// ...
+import ControlSegment from "@/components/ControlSegment";
 
 export default function Home() {
-  // Nếu chưa dùng section, chỉ cần 1 state trống
-  // const [section, setSection] = useState("");
+    const [section, setSection] = useState("me"); // default section
 
-  return (
-      <>
-        <ParticlesBackground />
-        <div
-            style={{
-              height: "100vh",
-              overflow: "hidden",
-              display: "flex",
-              flexDirection: "column",
-              backgroundColor: "#f9fafb",
-            }}
-        >
-          <div
-              style={{
-                flex: 1,
-                overflowY: "auto",
-                paddingBottom: "200px",
-                paddingTop: "4em",
-              }}
-          >
-            <div style={{ textAlign: "center" }}>
-              <AvatarHeader />
+    // (Tuỳ ý) Chưa cần import SectionMe... Nếu cần, cứ import thêm!
+
+    return (
+        <>
+            <ParticlesBackground />
+            <div
+                style={{
+                    height: "100vh",
+                    overflow: "hidden",
+                    display: "flex",
+                    flexDirection: "column",
+                    backgroundColor: "#f9fafb",
+                }}
+            >
+                <div
+                    style={{
+                        flex: 1,
+                        overflowY: "auto",
+                        paddingBottom: "200px",
+                        paddingTop: "4em",
+                    }}
+                >
+                    <div style={{ textAlign: "center" }}>
+                        <AvatarHeader />
+                        {/* Hiện tại chỉ có avatar, sau này chèn thêm section content ở đây */}
+                    </div>
+                </div>
+                <div
+                    style={{
+                        position: "fixed",
+                        bottom: "40px",
+                        width: "100%",
+                        zIndex: 1000,
+                        backdropFilter: "blur(12px)",
+                        backgroundColor: "transparent",
+                    }}
+                >
+                    <ControlSegment onSelect={setSection} />
+                </div>
             </div>
-          </div>
-          {/* Nếu sau này cần thanh ControlSegment, thêm vào dưới đây */}
-        </div>
-      </>
-  );
+        </>
+    );
 }
