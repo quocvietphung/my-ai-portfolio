@@ -1,5 +1,8 @@
 "use client";
-import { Box, Button, Flex, HStack } from "@chakra-ui/react";
+
+import { Box, Button, Flex, HStack, Input, InputGroup, IconButton } from "@chakra-ui/react";
+import { FiSend } from "react-icons/fi";
+import { useState } from "react";
 
 const sections = [
     { key: "me", label: "Me" },
@@ -15,6 +18,15 @@ interface Props {
 }
 
 export default function ControlSegment({ onSelect }: Props) {
+    const [input, setInput] = useState("");
+
+    const handleSend = () => {
+        if (!input.trim()) return;
+        // TODO: call OpenAI here
+        alert("Bạn vừa hỏi: " + input);
+        setInput("");
+    };
+
     return (
         <Box
             bg="white"
@@ -25,23 +37,43 @@ export default function ControlSegment({ onSelect }: Props) {
             maxW="780px"
             width="90%"
             mx="auto"
-            mb={4}
         >
             <Flex justify="center">
-                <HStack gap={4} wrap="wrap">
-                    {sections.map((item) => (
+                <HStack spacing={4} wrap="wrap">
+                    {sections.map((s) => (
                         <Button
-                            key={item.key}
+                            key={s.key}
                             variant="outline"
-                            colorScheme="teal"
-                            onClick={() => onSelect(item.key)}
+                            colorPalette="teal"
+                            onClick={() => onSelect(s.key)}
                             borderRadius="full"
                         >
-                            {item.label}
+                            {s.label}
                         </Button>
                     ))}
                 </HStack>
             </Flex>
+
+            <InputGroup mt={6} maxW="660px" mx="auto" endElement={
+                <IconButton
+                    aria-label="Send"
+                    icon={<FiSend />}
+                    colorPalette="blue"
+                    borderRadius="full"
+                    onClick={handleSend}
+                    disabled={!input.trim()}
+                />
+            }>
+                <Input
+                    placeholder="Ask me anything..."
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    size="lg"
+                    borderRadius="full"
+                    bg="#f1f3f5"
+                    onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleSend())}
+                />
+            </InputGroup>
         </Box>
     );
 }
