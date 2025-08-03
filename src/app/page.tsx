@@ -9,17 +9,15 @@ export default function Home() {
     const [chatHistory, setChatHistory] = useState<{ role: string; content: string }[]>([]);
     const [loading, setLoading] = useState(false);
 
-    // Gửi prompt từ ControlSegment (ĐÃ FIX LOGIC closure)
+    // Gửi prompt từ ControlSegment
     const handleSection = async (key: string) => {
         if (key.startsWith("__chat:")) {
             const prompt = key.replace("__chat:", "");
-
-            // LUÔN tạo nextHistory để tránh closure bug!
+            // Tạo nextHistory để đảm bảo cập nhật đúng state (tránh bug closure)
             const nextHistory = [...chatHistory, { role: "user", content: prompt }];
             setChatHistory(nextHistory);
             setLoading(true);
-
-            // Gọi API với nextHistory (KHÔNG lấy chatHistory cũ)
+            // Gọi API nội bộ của bạn
             const res = await fetch("/api/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -30,6 +28,7 @@ export default function Home() {
                 }),
             });
             const data = await res.json();
+            // Dựa vào cấu trúc trả về từ Azure OpenAI:
             const reply = data?.choices?.[0]?.message?.content || "No response.";
             setChatHistory(h => [...h, { role: "assistant", content: reply }]);
             setLoading(false);
@@ -40,13 +39,19 @@ export default function Home() {
 
     return (
         <>
+            {/* Hiệu ứng particles phải đặt TRÊN CÙNG, zIndex thấp */}
+            <ParticlesBackground />
+
+            {/* Container chính, zIndex cao hơn particles */}
             <div
                 style={{
                     height: "100vh",
                     overflow: "hidden",
                     display: "flex",
                     flexDirection: "column",
-                    backgroundColor: "#f9fafb",
+                    backgroundColor: "transparent", // <-- phải là transparent
+                    position: "relative",
+                    zIndex: 1, // <-- rất quan trọng!
                 }}
             >
                 <div
@@ -67,13 +72,15 @@ export default function Home() {
                                 width: "min(700px, 90vw)",
                                 border: "2px solid #f44336",
                                 borderRadius: 18,
-                                background: "#fff",
+                                background: "rgba(255,255,255,0.88)",  // Nên dùng background trắng trong suốt
                                 padding: 28,
                                 boxShadow: "0 2px 18px rgba(0,0,0,0.08)",
                                 textAlign: "left",
                                 fontSize: 17,
                                 minWidth: 300,
                                 maxWidth: "90vw",
+                                zIndex: 2,
+                                backdropFilter: "blur(4px)", // blur nhẹ nếu thích
                             }}
                         >
                             {chatHistory.length === 0 ? (
@@ -97,6 +104,7 @@ export default function Home() {
                         </div>
                     </div>
                 </div>
+                {/* Nút và thanh nhập chat (control), luôn nổi trên cùng */}
                 <div
                     style={{
                         position: "fixed",
