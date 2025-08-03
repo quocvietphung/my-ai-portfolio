@@ -47,8 +47,8 @@ export default function Home() {
                     flex="1"
                     align="center"
                     justify="center"
-                    pt="170px"
-                    pb="120px"
+                    pt="50px"
+                    pb="80px"
                 >
                     <ChatBox section={section} />
                 </Flex>
