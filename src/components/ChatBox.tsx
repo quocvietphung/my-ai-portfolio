@@ -19,7 +19,6 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
     const [loading, setLoading] = useState(false);
     const chatRef = useRef<HTMLDivElement>(null);
 
-    // Nhận prompt từ props (khi ControlSegment gửi lên)
     useEffect(() => {
         if (prompt && prompt.trim()) {
             handleChat(prompt);
@@ -28,14 +27,12 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [prompt]);
 
-    // Tự động scroll xuống cuối mỗi khi có chat mới/loading
     useEffect(() => {
         if (chatRef.current) {
             chatRef.current.scrollTop = chatRef.current.scrollHeight;
         }
     }, [chatHistory, loading]);
 
-    // Gửi prompt, nhận chat
     const handleChat = async (prompt: string) => {
         setChatHistory([{ role: "user", content: prompt }]);
         setLoading(true);
@@ -57,12 +54,11 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
         setLoading(false);
     };
 
-    // Reset chat khi chuyển section
     useEffect(() => {
         setChatHistory([]);
     }, [section]);
 
-    // Style ChatGPT chuẩn
+    // Style chuẩn
     const userBg = "#fff";
     const aiBg = "#f7fafc";
     const userBorder = "#e5e7eb";
@@ -75,17 +71,18 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
     return (
         <Box
             ref={chatRef}
-            w={["99vw", "95vw", "1000px"]}
+            w="90vw"
+            h={["55vh", "60vh", "50vh"]}
             minW="0"
-            maxW="1000px"
+            maxW="none"            // bỏ max width cũ
             mx="auto"
             minH="420px"
-            maxH="72vh"
+            maxH="70vh"
             bg="#fff"
             border="1.5px solid #e7eaf2"
             borderRadius="2xl"
             boxShadow="0 4px 32px 0 rgba(30,64,175,0.08)"
-            p={["8px", "28px"]}
+            p={["6px", "24px", "32px"]}  // responsive padding (mobile/tablet/desktop)
             fontSize="17px"
             display="flex"
             flexDirection="column"
@@ -124,7 +121,7 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
                                 fontSize="17px"
                                 px="22px"
                                 py="15px"
-                                maxW={["98%", "78%", "60%"]}
+                                maxW={["98%", "80%", "60%"]}
                                 minW="110px"
                                 display="flex"
                                 alignItems="center"
