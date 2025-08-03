@@ -5,13 +5,41 @@ import AvatarHeader from "@/components/AvatarHeader";
 import ControlSegment from "@/components/ControlSegment";
 
 export default function Home() {
-    const [section, setSection] = useState("me"); // default section
+    const [section, setSection] = useState("me");
+    const [chatHistory, setChatHistory] = useState<{ role: string; content: string }[]>([]);
+    const [loading, setLoading] = useState(false);
 
-    // (Tuỳ ý) Chưa cần import SectionMe... Nếu cần, cứ import thêm!
+    // Gửi prompt từ ControlSegment (ĐÃ FIX LOGIC closure)
+    const handleSection = async (key: string) => {
+        if (key.startsWith("__chat:")) {
+            const prompt = key.replace("__chat:", "");
+
+            // LUÔN tạo nextHistory để tránh closure bug!
+            const nextHistory = [...chatHistory, { role: "user", content: prompt }];
+            setChatHistory(nextHistory);
+            setLoading(true);
+
+            // Gọi API với nextHistory (KHÔNG lấy chatHistory cũ)
+            const res = await fetch("/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    messages: nextHistory,
+                    temperature: 0.7,
+                    max_tokens: 100,
+                }),
+            });
+            const data = await res.json();
+            const reply = data?.choices?.[0]?.message?.content || "No response.";
+            setChatHistory(h => [...h, { role: "assistant", content: reply }]);
+            setLoading(false);
+        } else {
+            setSection(key);
+        }
+    };
 
     return (
         <>
-            <ParticlesBackground />
             <div
                 style={{
                     height: "100vh",
@@ -31,7 +59,42 @@ export default function Home() {
                 >
                     <div style={{ textAlign: "center" }}>
                         <AvatarHeader />
-                        {/* Hiện tại chỉ có avatar, sau này chèn thêm section content ở đây */}
+                        {/* Vùng hiển thị chat */}
+                        <div
+                            style={{
+                                margin: "32px auto",
+                                minHeight: "300px",
+                                width: "min(700px, 90vw)",
+                                border: "2px solid #f44336",
+                                borderRadius: 18,
+                                background: "#fff",
+                                padding: 28,
+                                boxShadow: "0 2px 18px rgba(0,0,0,0.08)",
+                                textAlign: "left",
+                                fontSize: 17,
+                                minWidth: 300,
+                                maxWidth: "90vw",
+                            }}
+                        >
+                            {chatHistory.length === 0 ? (
+                                <div style={{ color: "#aaa", textAlign: "center" }}>Ask me anything!</div>
+                            ) : (
+                                chatHistory.map((m, i) =>
+                                    <div key={i} style={{
+                                        marginBottom: 20,
+                                        color: m.role === "assistant" ? "#1565c0" : "#222",
+                                        background: m.role === "assistant" ? "#f0f6fd" : "transparent",
+                                        padding: m.role === "assistant" ? "12px 18px" : 0,
+                                        borderRadius: 10
+                                    }}>
+                                        <b>{m.role === "user" ? "You" : "AI"}:</b> {m.content}
+                                    </div>
+                                )
+                            )}
+                            {loading && (
+                                <div style={{ color: "#1565c0", opacity: 0.5, fontStyle: "italic" }}>Thinking...</div>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <div
@@ -44,7 +107,7 @@ export default function Home() {
                         backgroundColor: "transparent",
                     }}
                 >
-                    <ControlSegment onSelect={setSection} />
+                    <ControlSegment onSelect={handleSection} />
                 </div>
             </div>
         </>
