@@ -1,5 +1,8 @@
 "use client";
 import { useState } from "react";
+import { Box, Flex, VStack, Text } from "@chakra-ui/react";
+import { useColorModeValue } from '@chakra-ui/color-mode';
+import { FaRobot } from "react-icons/fa";
 import ParticlesBackground from "@/components/ParticlesBackground";
 import AvatarHeader from "@/components/AvatarHeader";
 import ControlSegment from "@/components/ControlSegment";
@@ -9,15 +12,12 @@ export default function Home() {
     const [chatHistory, setChatHistory] = useState<{ role: string; content: string }[]>([]);
     const [loading, setLoading] = useState(false);
 
-    // Gửi prompt từ ControlSegment
     const handleSection = async (key: string) => {
         if (key.startsWith("__chat:")) {
             const prompt = key.replace("__chat:", "");
-            // Tạo nextHistory để đảm bảo cập nhật đúng state (tránh bug closure)
             const nextHistory = [...chatHistory, { role: "user", content: prompt }];
             setChatHistory(nextHistory);
             setLoading(true);
-            // Gọi API nội bộ của bạn
             const res = await fetch("/api/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -28,7 +28,6 @@ export default function Home() {
                 }),
             });
             const data = await res.json();
-            // Dựa vào cấu trúc trả về từ Azure OpenAI:
             const reply = data?.choices?.[0]?.message?.content || "No response.";
             setChatHistory(h => [...h, { role: "assistant", content: reply }]);
             setLoading(false);
@@ -37,87 +36,121 @@ export default function Home() {
         }
     };
 
+    // Màu sắc nổi bật, sử dụng theme Chakra UI
+    const userBg = useColorModeValue("#fff", "gray.700");
+    const aiBg = useColorModeValue("#e0f2fe", "blue.900");
+    const userBorder = useColorModeValue("#60a5fa", "blue.400");
+    const aiBorder = useColorModeValue("#0ea5e9", "blue.500");
+
     return (
         <>
-            {/* Hiệu ứng particles phải đặt TRÊN CÙNG, zIndex thấp */}
             <ParticlesBackground />
 
-            {/* Container chính, zIndex cao hơn particles */}
-            <div
-                style={{
-                    height: "100vh",
-                    overflow: "hidden",
-                    display: "flex",
-                    flexDirection: "column",
-                    backgroundColor: "transparent", // <-- phải là transparent
-                    position: "relative",
-                    zIndex: 1, // <-- rất quan trọng!
-                }}
+            <Flex
+                direction="column"
+                minH="100vh"
+                pos="relative"
+                overflow="hidden"
+                bg="transparent"
+                zIndex={1}
             >
-                <div
-                    style={{
-                        flex: 1,
-                        overflowY: "auto",
-                        paddingBottom: "200px",
-                        paddingTop: "4em",
-                    }}
+                <Flex
+                    flex="1"
+                    overflowY="auto"
+                    pb="200px"
+                    pt="4em"
+                    align="center"
+                    direction="column"
                 >
-                    <div style={{ textAlign: "center" }}>
-                        <AvatarHeader />
-                        {/* Vùng hiển thị chat */}
-                        <div
-                            style={{
-                                margin: "32px auto",
-                                minHeight: "300px",
-                                width: "min(700px, 90vw)",
-                                border: "2px solid #f44336",
-                                borderRadius: 18,
-                                background: "rgba(255,255,255,0.88)",  // Nên dùng background trắng trong suốt
-                                padding: 28,
-                                boxShadow: "0 2px 18px rgba(0,0,0,0.08)",
-                                textAlign: "left",
-                                fontSize: 17,
-                                minWidth: 300,
-                                maxWidth: "90vw",
-                                zIndex: 2,
-                                backdropFilter: "blur(4px)", // blur nhẹ nếu thích
-                            }}
-                        >
-                            {chatHistory.length === 0 ? (
-                                <div style={{ color: "#aaa", textAlign: "center" }}>Ask me anything!</div>
-                            ) : (
-                                chatHistory.map((m, i) =>
-                                    <div key={i} style={{
-                                        marginBottom: 20,
-                                        color: m.role === "assistant" ? "#1565c0" : "#222",
-                                        background: m.role === "assistant" ? "#f0f6fd" : "transparent",
-                                        padding: m.role === "assistant" ? "12px 18px" : 0,
-                                        borderRadius: 10
-                                    }}>
-                                        <b>{m.role === "user" ? "You" : "AI"}:</b> {m.content}
-                                    </div>
-                                )
-                            )}
-                            {loading && (
-                                <div style={{ color: "#1565c0", opacity: 0.5, fontStyle: "italic" }}>Thinking...</div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-                {/* Nút và thanh nhập chat (control), luôn nổi trên cùng */}
-                <div
-                    style={{
-                        position: "fixed",
-                        bottom: "40px",
-                        width: "100%",
-                        zIndex: 1000,
-                        backdropFilter: "blur(12px)",
-                        backgroundColor: "transparent",
-                    }}
+                    <AvatarHeader />
+
+                    {/* Khung chat */}
+                    <Box
+                        mt="32px"
+                        minH="320px"
+                        w={["98vw", "90vw", "700px"]}
+                        border="2px solid"
+                        borderColor="#93c5fd"
+                        borderRadius="2xl"
+                        bg="rgba(255,255,255,0.92)"
+                        p="32px"
+                        boxShadow="0 4px 32px 0 rgba(30,64,175,0.10)"
+                        fontSize="17px"
+                        minW="320px"
+                        maxW="90vw"
+                        zIndex={2}
+                        backdropFilter="blur(6px)"
+                        transition="box-shadow 0.2s"
+                    >
+                        {chatHistory.length === 0 ? (
+                            <Text color="#aaa" align="center">
+                                Ask me anything!
+                            </Text>
+                        ) : (
+                            <VStack gap={4} align="stretch">
+                                {chatHistory.map((m, i) => (
+                                    <Flex
+                                        key={i}
+                                        align="center"
+                                        justify={m.role === "user" ? "flex-end" : "flex-start"}
+                                    >
+                                        <Box
+                                            bg={m.role === "user" ? userBg : aiBg}
+                                            color={m.role === "user" ? "#222" : "#0369a1"}
+                                            border="1.5px solid"
+                                            borderColor={m.role === "user" ? userBorder : aiBorder}
+                                            borderRadius={
+                                                m.role === "user"
+                                                    ? "18px 18px 8px 18px"
+                                                    : "18px 18px 18px 8px"
+                                            }
+                                            boxShadow={
+                                                m.role === "user"
+                                                    ? "0 2px 12px 0 rgba(59,130,246,0.06)"
+                                                    : "0 2px 12px 0 rgba(14,165,233,0.11)"
+                                            }
+                                            fontWeight={m.role === "assistant" ? 600 : 500}
+                                            fontSize="17px"
+                                            px="19px"
+                                            py="13px"
+                                            maxW="80%"
+                                            display="flex"
+                                            alignItems="center"
+                                            gap={2}
+                                        >
+                                            {m.role === "assistant" && (
+                                                <Box as={FaRobot} fontSize={18} color="#0284c7" mt="1px" mr={2} />
+                                            )}
+                                            <Text as="span" whiteSpace="pre-line">
+                                                {m.content}
+                                            </Text>
+                                        </Box>
+                                    </Flex>
+                                ))}
+                                {loading && (
+                                    <Flex align="center" justify="flex-start" color="#0ea5e9" opacity={0.68} fontStyle="italic" mt={2} ml={2}>
+                                        <Box as={FaRobot} display="inline" mr={2} mb="-2px" />
+                                        Thinking...
+                                    </Flex>
+                                )}
+                            </VStack>
+                        )}
+                    </Box>
+                </Flex>
+
+                {/* Control input */}
+                <Box
+                    pos="fixed"
+                    bottom="40px"
+                    left={0}
+                    w="100%"
+                    zIndex={1000}
+                    backdropFilter="blur(12px)"
+                    bg="transparent"
                 >
                     <ControlSegment onSelect={handleSection} />
-                </div>
-            </div>
+                </Box>
+            </Flex>
         </>
     );
 }
