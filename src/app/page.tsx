@@ -4,25 +4,25 @@ import { Box, Flex } from "@chakra-ui/react";
 import ParticlesBackground from "@/components/ParticlesBackground";
 import AvatarHeader from "@/components/AvatarHeader";
 import ControlSegment from "@/components/ControlSegment";
-import ChatBox from "@/components/ChatBox"; // import mới
+import ChatBox from "@/components/ChatBox";
 
 export default function Home() {
     const [section, setSection] = useState("me");
+    const [prompt, setPrompt] = useState<string | null>(null);
 
-    // Handle: chuyển section sẽ reset chat qua prop section
-    // ChatBox sẽ nhận section để biết khi nào reset chat (xem trên)
-
-    // Để gửi prompt từ ControlSegment, bạn cần truyền function handleSection vào,
-    // bên trong handleSection sẽ gọi handleChat của ChatBox thông qua ref hoặc callback,
-    // hoặc đơn giản: để ControlSegment truyền luôn prompt xuống ChatBox qua props (xem lại flow).
-
-    // Dưới đây là ví dụ đơn giản: ControlSegment truyền prompt về Home, rồi Home truyền prompt cho ChatBox
-    // Để đơn giản hóa, ở đây Home chỉ render AvatarHeader, ChatBox và ControlSegment.
+    // Lắng nghe cả section lẫn prompt
+    const handleControl = (key: string) => {
+        if (key.startsWith("__chat:")) {
+            setPrompt(key.replace("__chat:", ""));
+        } else {
+            setSection(key);
+            setPrompt(null); // reset prompt nếu đổi tab
+        }
+    };
 
     return (
         <>
             <ParticlesBackground />
-            {/* AvatarHeader cố định */}
             <Box
                 pos="fixed"
                 top="32px"
@@ -34,7 +34,6 @@ export default function Home() {
             >
                 <AvatarHeader />
             </Box>
-            {/* Main layout */}
             <Flex
                 direction="column"
                 minH="100vh"
@@ -42,7 +41,6 @@ export default function Home() {
                 bg="transparent"
                 zIndex={1}
             >
-                {/* Khung chat */}
                 <Flex
                     flex="1"
                     align="center"
@@ -50,9 +48,13 @@ export default function Home() {
                     pt="50px"
                     pb="80px"
                 >
-                    <ChatBox section={section} />
+                    {/* Truyền prop prompt và hàm onPromptHandled */}
+                    <ChatBox
+                        section={section}
+                        prompt={prompt}
+                        onPromptHandled={() => setPrompt(null)}
+                    />
                 </Flex>
-                {/* Control input – luôn nổi cuối trang */}
                 <Box
                     pos="fixed"
                     bottom="32px"
@@ -62,7 +64,8 @@ export default function Home() {
                     backdropFilter="blur(12px)"
                     bg="transparent"
                 >
-                    <ControlSegment onSelect={(key) => setSection(key)} />
+                    {/* Truyền handleControl cho ControlSegment */}
+                    <ControlSegment onSelect={handleControl} />
                 </Box>
             </Flex>
         </>

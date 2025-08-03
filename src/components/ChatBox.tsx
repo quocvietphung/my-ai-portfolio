@@ -10,12 +10,23 @@ type ChatMessage = {
 
 type ChatBoxProps = {
     section: string;
+    prompt?: string | null;
+    onPromptHandled?: () => void;
 };
 
-export default function ChatBox({ section }: ChatBoxProps) {
+export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxProps) {
     const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
     const [loading, setLoading] = useState(false);
     const chatRef = useRef<HTMLDivElement>(null);
+
+    // Gửi chat khi có prompt mới
+    useEffect(() => {
+        if (prompt && prompt.trim() !== "") {
+            handleChat(prompt);
+            onPromptHandled?.();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [prompt]);
 
     // Always scroll to bottom on new message
     useEffect(() => {
@@ -24,7 +35,6 @@ export default function ChatBox({ section }: ChatBoxProps) {
         }
     }, [chatHistory, loading]);
 
-    // Gửi prompt và nhận kết quả, luôn reset chatHistory về câu mới nhất
     const handleChat = async (prompt: string) => {
         setChatHistory([{ role: "user", content: prompt }]);
         setLoading(true);
@@ -54,8 +64,6 @@ export default function ChatBox({ section }: ChatBoxProps) {
     // Style cho user/assistant
     const userBg = "#fff", aiBg = "#e0f2fe";
     const userBorder = "#60a5fa", aiBorder = "#0ea5e9";
-
-    // Đưa scroll style vào file CSS, nếu vẫn muốn giữ inline thì ép kiểu as any (Chakra chưa support type này)
     const scrollbarStyles = {
         "::-webkit-scrollbar": { width: "9px", background: "#eee", borderRadius: "12px" },
         "::-webkit-scrollbar-thumb": { background: "#c7d2fe", borderRadius: "12px" },
