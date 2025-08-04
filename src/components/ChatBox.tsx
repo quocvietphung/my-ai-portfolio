@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { Box, Flex, VStack, Text } from "@chakra-ui/react";
 import { FaRobot } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+import { Typewriter } from "react-simple-typewriter";
 
 type ChatMessage = {
     role: "user" | "assistant";
@@ -79,11 +80,8 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
         setChatHistory([]);
     }, [section]);
 
-    // Style chuẩn
     const userBg = "#fff";
-    const aiBg = "#f7fafc";
     const userBorder = "#e5e7eb";
-    const aiBorder = "#d1e3f9";
 
     return (
         <Box
@@ -106,7 +104,6 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
             overflowY="auto"
             zIndex={2}
         >
-            {/* Animate câu hỏi user trên cùng */}
             <AnimatePresence>
                 {chatHistory.length > 0 && chatHistory[0].role === "user" && showTopQuestion && (
                     <MotionFlex
@@ -127,6 +124,14 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
                             lineHeight="1.3"
                             letterSpacing="0.02em"
                             textShadow="0 2px 10px #e1e4eb55"
+                            px="24px"
+                            py="15px"
+                            maxW={["98%", "70%", "50%"]}
+                            bg={userBg}
+                            border="1px solid"
+                            borderColor={userBorder}
+                            borderRadius="20px 20px 10px 20px"
+                            boxShadow="0 2px 8px 0 rgba(0,0,0,0.04)"
                         >
                             {chatHistory[0].content}
                         </Text>
@@ -134,7 +139,6 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
                 )}
             </AnimatePresence>
 
-            {/* Các tin nhắn chat còn lại */}
             <VStack gap={4} align="stretch" w="100%">
                 {chatHistory.length === 0 ? (
                     <Text color="#aaa" textAlign="center" pt={6}>
@@ -149,33 +153,27 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
                             w="100%"
                         >
                             {m.role === "assistant" ? (
-                                <Box
-                                    bg={aiBg}
+                                <Text
                                     color="#185ca8"
-                                    border="1px solid"
-                                    borderColor={aiBorder}
-                                    borderRadius="20px 20px 20px 10px"
-                                    boxShadow="0 2px 8px 0 rgba(44,62,80,0.06)"
                                     fontWeight={600}
                                     fontSize="17px"
                                     px="32px"
                                     py="15px"
                                     maxW="100%"
-                                    display="flex"
-                                    alignItems="center"
-                                    gap={2}
-                                    justifyContent="flex-start"
+                                    whiteSpace="pre-line"
+                                    textAlign="justify"
+                                    style={{ flex: 1 }}
                                 >
-                                    <Box as={FaRobot} fontSize={19} color="#059669" mt="1px" mr={4} />
-                                    <Text
-                                        as="span"
-                                        whiteSpace="pre-line"
-                                        textAlign="justify"
-                                        flex="1"
-                                    >
-                                        {m.content}
-                                    </Text>
-                                </Box>
+                                    <Typewriter
+                                        words={[m.content]}
+                                        loop={1}
+                                        cursor
+                                        cursorStyle="|"
+                                        typeSpeed={50}
+                                        deleteSpeed={0}
+                                        delaySpeed={1000}
+                                    />
+                                </Text>
                             ) : (
                                 <Box
                                     bg={userBg}
@@ -203,7 +201,15 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
                     ))
                 )}
                 {loading && (
-                    <Flex align="center" justify="flex-start" color="#0ea5e9" opacity={0.7} fontStyle="italic" mt={2} ml={2}>
+                    <Flex
+                        align="center"
+                        justify="flex-start"
+                        color="#0ea5e9"
+                        opacity={0.7}
+                        fontStyle="italic"
+                        mt={2}
+                        ml={2}
+                    >
                         <Box as={FaRobot} display="inline" mr={2} mb="-2px" />
                         Thinking...
                     </Flex>
