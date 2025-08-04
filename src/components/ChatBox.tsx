@@ -106,6 +106,7 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
             overflowY="auto"
             zIndex={2}
         >
+            {/* Animate câu hỏi user trên cùng */}
             <AnimatePresence>
                 {chatHistory.length > 0 && chatHistory[0].role === "user" && showTopQuestion && (
                     <MotionFlex
@@ -133,6 +134,7 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
                 )}
             </AnimatePresence>
 
+            {/* Các tin nhắn chat còn lại */}
             <VStack gap={4} align="stretch" w="100%">
                 {chatHistory.length === 0 ? (
                     <Text color="#aaa" textAlign="center" pt={6}>
@@ -146,38 +148,57 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
                             justify={m.role === "user" ? "flex-end" : "flex-start"}
                             w="100%"
                         >
-                            <Box
-                                bg={m.role === "user" ? userBg : aiBg}
-                                color={m.role === "user" ? "#212121" : "#185ca8"}
-                                border="1px solid"
-                                borderColor={m.role === "user" ? userBorder : aiBorder}
-                                borderRadius={
-                                    m.role === "user"
-                                        ? "20px 20px 10px 20px"
-                                        : "20px 20px 20px 10px"
-                                }
-                                boxShadow={
-                                    m.role === "user"
-                                        ? "0 2px 8px 0 rgba(0,0,0,0.04)"
-                                        : "0 2px 8px 0 rgba(44,62,80,0.06)"
-                                }
-                                fontWeight={m.role === "assistant" ? 600 : 500}
-                                fontSize="17px"
-                                px="22px"
-                                py="15px"
-                                maxW={["98%", "80%", "60%"]}
-                                minW="110px"
-                                display="flex"
-                                alignItems="center"
-                                gap={2}
-                            >
-                                {m.role === "assistant" && (
-                                    <Box as={FaRobot} fontSize={19} color="#059669" mt="1px" mr={2} />
-                                )}
-                                <Text as="span" whiteSpace="pre-line">
-                                    {m.content}
-                                </Text>
-                            </Box>
+                            {m.role === "assistant" ? (
+                                <Box
+                                    bg={aiBg}
+                                    color="#185ca8"
+                                    border="1px solid"
+                                    borderColor={aiBorder}
+                                    borderRadius="20px 20px 20px 10px"
+                                    boxShadow="0 2px 8px 0 rgba(44,62,80,0.06)"
+                                    fontWeight={600}
+                                    fontSize="17px"
+                                    px="32px"
+                                    py="15px"
+                                    maxW="100%"
+                                    display="flex"
+                                    alignItems="center"
+                                    gap={2}
+                                    justifyContent="flex-start"
+                                >
+                                    <Box as={FaRobot} fontSize={19} color="#059669" mt="1px" mr={4} />
+                                    <Text
+                                        as="span"
+                                        whiteSpace="pre-line"
+                                        textAlign="justify"
+                                        flex="1"
+                                    >
+                                        {m.content}
+                                    </Text>
+                                </Box>
+                            ) : (
+                                <Box
+                                    bg={userBg}
+                                    color="#212121"
+                                    border="1px solid"
+                                    borderColor={userBorder}
+                                    borderRadius="20px 20px 10px 20px"
+                                    boxShadow="0 2px 8px 0 rgba(0,0,0,0.04)"
+                                    fontWeight={500}
+                                    fontSize="17px"
+                                    px="22px"
+                                    py="15px"
+                                    maxW={["98%", "80%", "60%"]}
+                                    minW="110px"
+                                    display="flex"
+                                    alignItems="center"
+                                    gap={2}
+                                >
+                                    <Text as="span" whiteSpace="pre-line">
+                                        {m.content}
+                                    </Text>
+                                </Box>
+                            )}
                         </Flex>
                     ))
                 )}
