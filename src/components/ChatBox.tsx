@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Box, Flex, VStack, Text } from "@chakra-ui/react";
 import { FaRobot } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 
 type ChatMessage = {
     role: "user" | "assistant";
@@ -14,9 +15,12 @@ type ChatBoxProps = {
     onPromptHandled?: () => void;
 };
 
+const MotionFlex = motion(Flex);
+
 export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxProps) {
     const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
     const [loading, setLoading] = useState(false);
+    const [showTopQuestion, setShowTopQuestion] = useState(true);
     const chatRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -32,6 +36,17 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
             chatRef.current.scrollTop = chatRef.current.scrollHeight;
         }
     }, [chatHistory, loading]);
+
+    // Ẩn câu hỏi trên cùng sau 1.5s
+    useEffect(() => {
+        if (chatHistory.length > 0 && chatHistory[0].role === "user") {
+            setShowTopQuestion(true);
+            const timer = setTimeout(() => {
+                setShowTopQuestion(false);
+            }, 1000);
+            return () => clearTimeout(timer);
+        }
+    }, [chatHistory]);
 
     const handleChat = async (prompt: string) => {
         setChatHistory([{ role: "user", content: prompt }]);
@@ -63,10 +78,6 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
     const aiBg = "#f7fafc";
     const userBorder = "#e5e7eb";
     const aiBorder = "#d1e3f9";
-    const scrollbarStyles = {
-        "::-webkit-scrollbar": { width: "9px", background: "#f3f4f6", borderRadius: "12px" },
-        "::-webkit-scrollbar-thumb": { background: "#e0e7ef", borderRadius: "12px" },
-    } as any;
 
     return (
         <Box
@@ -89,25 +100,36 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
             overflowY="auto"
             zIndex={2}
         >
-            {/* ----------- Bubble câu hỏi trên cùng, căn giữa ----------- */}
-            {chatHistory.length > 0 && chatHistory[0].role === "user" && (
-                <Flex w="100%" justify="center" mb={4} mt={0}>
-                    <Text
-                        fontSize={["16px", "20px", "22px"]}
-                        fontWeight={700}
-                        color="#212121"
-                        textAlign="center"
-                        lineHeight="1.3"
-                        letterSpacing="0.02em"
+            {/* Dùng AnimatePresence để animate mount/unmount */}
+            <AnimatePresence>
+                {chatHistory.length > 0 && chatHistory[0].role === "user" && showTopQuestion && (
+                    <MotionFlex
+                        w="100%"
+                        justify="center"
+                        mb={3}
+                        mt={0}
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.4 }}
                     >
-                        {chatHistory[0].content}
-                    </Text>
-                </Flex>
-            )}
+                        <Text
+                            fontSize={["16px", "18px", "20px"]}
+                            fontWeight={700}
+                            color="#212121"
+                            textAlign="center"
+                            lineHeight="1.3"
+                            letterSpacing="0.02em"
+                            textShadow="0 2px 10px #e1e4eb55"
+                        >
+                            {chatHistory[0].content}
+                        </Text>
+                    </MotionFlex>
+                )}
+            </AnimatePresence>
 
-            {/* ----------- Các chat message còn lại (assistant trả lời...) ----------- */}
+            {/* Chat messages còn lại */}
             <VStack gap={4} align="stretch" w="100%">
-                {/* Nếu chỉ có 1 message là user question thì không render lại bên dưới */}
                 {chatHistory.length === 0 ? (
                     <Text color="#aaa" textAlign="center" pt={6}>
                         Ask me anything!
