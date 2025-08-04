@@ -23,6 +23,7 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
     const [showTopQuestion, setShowTopQuestion] = useState(true);
     const chatRef = useRef<HTMLDivElement>(null);
 
+    // Khi prompt thay đổi, gọi handleChat một lần duy nhất
     useEffect(() => {
         if (prompt && prompt.trim()) {
             handleChat(prompt);
@@ -31,6 +32,7 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [prompt]);
 
+    // Scroll xuống dưới khi chatHistory hoặc loading thay đổi
     useEffect(() => {
         if (chatRef.current) {
             chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -43,14 +45,15 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
             setShowTopQuestion(true);
             const timer = setTimeout(() => {
                 setShowTopQuestion(false);
-            }, 1000);
+            }, 1500);
             return () => clearTimeout(timer);
         }
     }, [chatHistory]);
 
+    // Hàm gọi API chat, set chatHistory 1 lần với user + assistant
     const handleChat = async (prompt: string) => {
-        setChatHistory([{ role: "user", content: prompt }]);
         setLoading(true);
+
         const res = await fetch("/api/chat", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -60,12 +63,15 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
                 max_tokens: 300,
             }),
         });
+
         const data = await res.json();
         const reply = data?.choices?.[0]?.message?.content || "No response.";
+
         setChatHistory([
             { role: "user", content: prompt },
             { role: "assistant", content: reply }
         ]);
+
         setLoading(false);
     };
 
@@ -100,7 +106,6 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
             overflowY="auto"
             zIndex={2}
         >
-            {/* Dùng AnimatePresence để animate mount/unmount */}
             <AnimatePresence>
                 {chatHistory.length > 0 && chatHistory[0].role === "user" && showTopQuestion && (
                     <MotionFlex
@@ -128,7 +133,6 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
                 )}
             </AnimatePresence>
 
-            {/* Chat messages còn lại */}
             <VStack gap={4} align="stretch" w="100%">
                 {chatHistory.length === 0 ? (
                     <Text color="#aaa" textAlign="center" pt={6}>
