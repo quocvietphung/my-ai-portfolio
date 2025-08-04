@@ -74,7 +74,7 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
             w="90vw"
             h={["55vh", "60vh", "50vh"]}
             minW="0"
-            maxW="none"            // bỏ max width cũ
+            maxW="none"
             mx="auto"
             minH="420px"
             maxH="70vh"
@@ -82,20 +82,45 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
             border="1.5px solid #e7eaf2"
             borderRadius="2xl"
             boxShadow="0 4px 32px 0 rgba(30,64,175,0.08)"
-            p={["6px", "24px", "32px"]}  // responsive padding (mobile/tablet/desktop)
+            p={["6px", "24px", "32px"]}
             fontSize="17px"
             display="flex"
             flexDirection="column"
             overflowY="auto"
             zIndex={2}
         >
+            {/* ----------- Bubble câu hỏi trên cùng, căn giữa ----------- */}
+            {chatHistory.length > 0 && chatHistory[0].role === "user" && (
+                <Flex w="100%" justify="center" mb={5} mt={2}>
+                    <Box
+                        bg={userBg}
+                        color="#212121"
+                        border="1px solid"
+                        borderColor={userBorder}
+                        borderRadius="20px"
+                        boxShadow="0 2px 8px 0 rgba(0,0,0,0.08)"
+                        fontWeight={600}
+                        fontSize="18px"
+                        px="32px"
+                        py="18px"
+                        maxW={["95%", "70%", "50%"]}
+                        minW="130px"
+                        textAlign="center"
+                    >
+                        {chatHistory[0].content}
+                    </Box>
+                </Flex>
+            )}
+
+            {/* ----------- Các chat message còn lại (assistant trả lời...) ----------- */}
             <VStack gap={4} align="stretch" w="100%">
+                {/* Nếu chỉ có 1 message là user question thì không render lại bên dưới */}
                 {chatHistory.length === 0 ? (
                     <Text color="#aaa" textAlign="center" pt={6}>
                         Ask me anything!
                     </Text>
                 ) : (
-                    chatHistory.map((m, i) => (
+                    chatHistory.slice(1).map((m, i) => (
                         <Flex
                             key={i}
                             align="flex-end"
