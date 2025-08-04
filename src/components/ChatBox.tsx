@@ -91,24 +91,17 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
         >
             {/* ----------- Bubble câu hỏi trên cùng, căn giữa ----------- */}
             {chatHistory.length > 0 && chatHistory[0].role === "user" && (
-                <Flex w="100%" justify="center" mb={5} mt={2}>
-                    <Box
-                        bg={userBg}
+                <Flex w="100%" justify="center" mb={4} mt={3}>
+                    <Text
+                        fontSize={["16px", "20px", "22px"]}
+                        fontWeight={700}
                         color="#212121"
-                        border="1px solid"
-                        borderColor={userBorder}
-                        borderRadius="20px"
-                        boxShadow="0 2px 8px 0 rgba(0,0,0,0.08)"
-                        fontWeight={600}
-                        fontSize="18px"
-                        px="32px"
-                        py="18px"
-                        maxW={["95%", "70%", "50%"]}
-                        minW="130px"
                         textAlign="center"
+                        lineHeight="1.3"
+                        letterSpacing="0.02em"
                     >
                         {chatHistory[0].content}
-                    </Box>
+                    </Text>
                 </Flex>
             )}
 
