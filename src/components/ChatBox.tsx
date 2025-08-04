@@ -124,7 +124,7 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
                             lineHeight="1.3"
                             letterSpacing="0.02em"
                             textShadow="0 2px 10px #e1e4eb55"
-                            px="24px"
+                            px="15px"
                             py="15px"
                             maxW={["98%", "70%", "50%"]}
                             bg={userBg}
