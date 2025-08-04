@@ -159,9 +159,8 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
                                 <Typewriter
                                     words={[m.content]}
                                     loop={1}
-                                    cursor
-                                    cursorStyle="|"
-                                    typeSpeed={50}
+                                    cursor={false}
+                                    typeSpeed={20}
                                     deleteSpeed={0}
                                     delaySpeed={1000}
                                 />
