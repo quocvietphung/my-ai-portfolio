@@ -7,16 +7,17 @@ import ControlSegment from "@/components/ControlSegment";
 import ChatBox from "@/components/ChatBox";
 
 export default function Home() {
-    const [section, setSection] = useState("me");
+    // Khởi đầu không có section nào được chọn
+    const [section, setSection] = useState<string | null>(null);
     const [prompt, setPrompt] = useState<string | null>(null);
 
-    // Lắng nghe cả section lẫn prompt
+    // Xử lý chọn tab hoặc gửi prompt
     const handleControl = (key: string) => {
         if (key.startsWith("__chat:")) {
             setPrompt(key.replace("__chat:", ""));
         } else {
             setSection(key);
-            setPrompt(null); // reset prompt nếu đổi tab
+            setPrompt(null); // reset prompt khi đổi section
         }
     };
 
@@ -34,23 +35,10 @@ export default function Home() {
             >
                 <AvatarHeader />
             </Box>
-            <Flex
-                direction="column"
-                minH="100vh"
-                pos="relative"
-                bg="transparent"
-                zIndex={1}
-            >
-                <Flex
-                    flex="1"
-                    align="center"
-                    justify="center"
-                    pt="50px"
-                    pb="80px"
-                >
-                    {/* Truyền prop prompt và hàm onPromptHandled */}
+            <Flex direction="column" minH="100vh" pos="relative" bg="transparent" zIndex={1}>
+                <Flex flex="1" align="center" justify="center" pt="50px" pb="80px">
                     <ChatBox
-                        section={section}
+                        section={section ?? ""}
                         prompt={prompt}
                         onPromptHandled={() => setPrompt(null)}
                     />
@@ -64,7 +52,6 @@ export default function Home() {
                     backdropFilter="blur(12px)"
                     bg="transparent"
                 >
-                    {/* Truyền handleControl cho ControlSegment */}
                     <ControlSegment onSelect={handleControl} />
                 </Box>
             </Flex>
