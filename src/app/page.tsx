@@ -5,19 +5,26 @@ import ParticlesBackground from "@/components/ParticlesBackground";
 import AvatarHeader from "@/components/AvatarHeader";
 import ControlSegment from "@/components/ControlSegment";
 import ChatBox from "@/components/ChatBox";
+import { sectionDefaultPrompts } from "../constants/sections";
 
 export default function Home() {
-    // Khởi đầu không có section nào được chọn
     const [section, setSection] = useState<string | null>(null);
     const [prompt, setPrompt] = useState<string | null>(null);
 
-    // Xử lý chọn tab hoặc gửi prompt
     const handleControl = (key: string) => {
         if (key.startsWith("__chat:")) {
+            // Người dùng nhập prompt thủ công
             setPrompt(key.replace("__chat:", ""));
+        } else if (key.startsWith("__section:")) {
+            // Người dùng bấm nút chọn section
+            const secKey = key.replace("__section:", "");
+            setSection(secKey);
+            // Gửi prompt mặc định tương ứng section
+            setPrompt(sectionDefaultPrompts[secKey]);
         } else {
+            // Nếu key trực tiếp section
             setSection(key);
-            setPrompt(null); // reset prompt khi đổi section
+            setPrompt(null);
         }
     };
 
@@ -35,7 +42,13 @@ export default function Home() {
             >
                 <AvatarHeader />
             </Box>
-            <Flex direction="column" minH="100vh" pos="relative" bg="transparent" zIndex={1}>
+            <Flex
+                direction="column"
+                minH="100vh"
+                pos="relative"
+                bg="transparent"
+                zIndex={1}
+            >
                 <Flex flex="1" align="center" justify="center" pt="50px" pb="80px">
                     <ChatBox
                         section={section ?? ""}

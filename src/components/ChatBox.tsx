@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useRef, useEffect } from "react";
 import { Box, Flex, VStack, Text } from "@chakra-ui/react";
 import { FaRobot } from "react-icons/fa";
@@ -7,14 +6,29 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Typewriter } from "react-simple-typewriter";
 
 import { ChatMessage, sendChatMessage } from "../services/chatService";
+import PersonalInfoRenderer from "./PersonalInfoRenderer";
+import { PERSONAL_INFO_KEYWORDS_BY_SECTION } from "../constants/sections"
+
+const MotionFlex = motion(Flex);
+
+// Kiểm tra prompt thuộc section nào
+function getSectionFromPrompt(prompt: string): string | null {
+    const lower = prompt.toLowerCase();
+    for (const [section, keywords] of Object.entries(PERSONAL_INFO_KEYWORDS_BY_SECTION)) {
+        for (const kw of keywords) {
+            if (lower.includes(kw)) {
+                return section;
+            }
+        }
+    }
+    return null;
+}
 
 type ChatBoxProps = {
     section: string;
     prompt?: string | null;
     onPromptHandled?: () => void;
 };
-
-const MotionFlex = motion(Flex);
 
 export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxProps) {
     const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
@@ -24,7 +38,15 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
 
     useEffect(() => {
         if (prompt && prompt.trim()) {
-            handleChat(prompt);
+            const promptSection = getSectionFromPrompt(prompt);
+            if (promptSection) {
+                setChatHistory([
+                    { role: "user", content: prompt },
+                    { role: "assistant", content: "" }, // assistant hiển thị section info
+                ]);
+            } else {
+                handleChat(prompt);
+            }
             onPromptHandled?.();
         }
     }, [prompt]);
@@ -48,7 +70,6 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
     const handleChat = async (prompt: string) => {
         setLoading(true);
         setChatHistory([{ role: "user", content: prompt }]);
-
         try {
             const assistantMessage = await sendChatMessage(prompt);
             setChatHistory([
@@ -61,16 +82,8 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
                 { role: "assistant", content: "Error: Could not get response." },
             ]);
         }
-
         setLoading(false);
     };
-
-    useEffect(() => {
-        setChatHistory([]);
-    }, [section]);
-
-    const userBg = "#fff";
-    const userBorder = "#e5e7eb";
 
     return (
         <Box
@@ -116,9 +129,8 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
                             px="20px"
                             py="15px"
                             maxW={["98%", "70%", "50%"]}
-                            bg={userBg}
-                            border="1px solid"
-                            borderColor={userBorder}
+                            bg="#fff"
+                            border="1px solid #e5e7eb"
                             borderRadius="20px 20px 10px 20px"
                             boxShadow="0 2px 8px 0 rgba(0,0,0,0.04)"
                         >
@@ -129,37 +141,42 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
             </AnimatePresence>
 
             <VStack gap={4} align="stretch" w="100%">
-                {chatHistory.length === 0 ? (
+                {/* Nếu prompt là câu hỏi cá nhân thì hiển thị phần section */}
+                {chatHistory.length > 1 && getSectionFromPrompt(chatHistory[0].content) ? (
+                    <PersonalInfoRenderer section={section} />
+                ) : chatHistory.length === 0 ? (
                     <Text color="#aaa" textAlign="center" pt={6}>
                         Ask me anything!
                     </Text>
                 ) : (
-                    chatHistory.slice(1).map((m, i) =>
-                        m.role === "assistant" ? (
-                            <Text
-                                key={m.content}
-                                color="#185ca8"
-                                fontWeight={600}
-                                fontSize="17px"
-                                px="32px"
-                                py="15px"
-                                maxW="100%"
-                                whiteSpace="pre-line"
-                                textAlign="justify"
-                                style={{ flex: 1 }}
-                            >
-                                <Typewriter
-                                    words={[m.content]}
-                                    loop={1}
-                                    cursor={false}
-                                    typeSpeed={20}
-                                    deleteSpeed={0}
-                                    delaySpeed={1000}
-                                />
-                            </Text>
-                        ) : null
+                    chatHistory.slice(1).map(
+                        (m, i) =>
+                            m.role === "assistant" && (
+                                <Text
+                                    key={m.content}
+                                    color="#185ca8"
+                                    fontWeight={600}
+                                    fontSize="17px"
+                                    px="32px"
+                                    py="15px"
+                                    maxW="100%"
+                                    whiteSpace="pre-line"
+                                    textAlign="justify"
+                                    style={{ flex: 1 }}
+                                >
+                                    <Typewriter
+                                        words={[m.content]}
+                                        loop={1}
+                                        cursor={false}
+                                        typeSpeed={20}
+                                        deleteSpeed={0}
+                                        delaySpeed={1000}
+                                    />
+                                </Text>
+                            )
                     )
                 )}
+
                 {loading && (
                     <Flex
                         align="center"

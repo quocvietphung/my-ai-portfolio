@@ -52,3 +52,13 @@ export const sections = [
     { key: "contact", label: "Contact" },
     { key: "other", label: "Other" },
 ];
+
+// Map section => câu hỏi mặc định (dùng để gửi prompt khi bấm nút)
+export const sectionDefaultPrompts: Record<string, string> = {
+    me: "who are you",
+    projects: "what is your project",
+    skills: "what are your skills",
+    fun: "what do you do for fun",
+    contact: "how can I contact you",
+    other: "tell me something else",
+};

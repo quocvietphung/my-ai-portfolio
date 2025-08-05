@@ -55,7 +55,10 @@ export default function ControlSegment({ onSelect }: ControlSegmentProps) {
                                 transform: "translateY(0)",
                                 boxShadow: "none",
                             }}
-                            onClick={() => onSelect(s.key)}
+                            onClick={() => {
+                                // Khi click nút: gửi prompt tương ứng kèm section key
+                                onSelect("__section:" + s.key);
+                            }}
                         >
                             {s.label}
                         </Button>
