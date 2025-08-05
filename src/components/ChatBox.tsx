@@ -1,14 +1,12 @@
 "use client";
+
 import { useState, useRef, useEffect } from "react";
 import { Box, Flex, VStack, Text } from "@chakra-ui/react";
 import { FaRobot } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { Typewriter } from "react-simple-typewriter";
 
-type ChatMessage = {
-    role: "user" | "assistant";
-    content: string;
-};
+import { ChatMessage, sendChatMessage } from "../services/chatService";
 
 type ChatBoxProps = {
     section: string;
@@ -24,23 +22,19 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
     const [showTopQuestion, setShowTopQuestion] = useState(true);
     const chatRef = useRef<HTMLDivElement>(null);
 
-    // Khi prompt thay đổi, gọi handleChat một lần duy nhất
     useEffect(() => {
         if (prompt && prompt.trim()) {
             handleChat(prompt);
             onPromptHandled?.();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [prompt]);
 
-    // Scroll xuống dưới khi chatHistory hoặc loading thay đổi
     useEffect(() => {
         if (chatRef.current) {
             chatRef.current.scrollTop = chatRef.current.scrollHeight;
         }
     }, [chatHistory, loading]);
 
-    // Ẩn câu hỏi trên cùng sau 1.5s
     useEffect(() => {
         if (chatHistory.length > 0 && chatHistory[0].role === "user") {
             setShowTopQuestion(true);
@@ -51,25 +45,23 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
         }
     }, [chatHistory]);
 
-    // Hàm gọi API chat, set chatHistory 1 lần với user + assistant
     const handleChat = async (prompt: string) => {
         setLoading(true);
-        const res = await fetch("/api/chat", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                messages: [{ role: "user", content: prompt }],
-                temperature: 0.7,
-                max_tokens: 300,
-            }),
-        });
-        const data = await res.json();
-        const reply = data?.choices?.[0]?.message?.content || "No response.";
+        setChatHistory([{ role: "user", content: prompt }]);
 
-        setChatHistory([
-            { role: "user", content: prompt },
-            { role: "assistant", content: reply }
-        ]);
+        try {
+            const assistantMessage = await sendChatMessage(prompt);
+            setChatHistory([
+                { role: "user", content: prompt },
+                assistantMessage,
+            ]);
+        } catch (error) {
+            setChatHistory([
+                { role: "user", content: prompt },
+                { role: "assistant", content: "Error: Could not get response." },
+            ]);
+        }
+
         setLoading(false);
     };
 
@@ -142,8 +134,8 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
                         Ask me anything!
                     </Text>
                 ) : (
-                    chatHistory.slice(1).map((m, i) => (
-                        m.role === "assistant" && (
+                    chatHistory.slice(1).map((m, i) =>
+                        m.role === "assistant" ? (
                             <Text
                                 key={m.content}
                                 color="#185ca8"
@@ -165,8 +157,8 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
                                     delaySpeed={1000}
                                 />
                             </Text>
-                        )
-                    ))
+                        ) : null
+                    )
                 )}
                 {loading && (
                     <Flex
