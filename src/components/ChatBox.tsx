@@ -13,14 +13,16 @@ const MotionFlex = motion(Flex);
 
 // Kiểm tra prompt thuộc section nào
 function getSectionFromPrompt(prompt: string): string | null {
-    const lower = prompt.toLowerCase();
+    const lower = prompt.toLowerCase().trim();
     for (const [section, keywords] of Object.entries(PERSONAL_INFO_KEYWORDS_BY_SECTION)) {
         for (const kw of keywords) {
-            if (lower.includes(kw)) {
+            if (lower.includes(kw.toLowerCase().trim())) {
+                console.log(`Prompt "${prompt}" matched keyword "${kw}" in section "${section}"`);
                 return section;
             }
         }
     }
+    console.log(`Prompt "${prompt}" did not match any keyword.`);
     return null;
 }
 
