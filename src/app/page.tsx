@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { Box, Flex } from "@chakra-ui/react";
 import ParticlesBackground from "@/components/ParticlesBackground";
@@ -8,23 +9,25 @@ import ChatBox from "@/components/ChatBox";
 import { sectionDefaultPrompts } from "../constants/sections";
 
 export default function Home() {
-    const [section, setSection] = useState<string | null>(null);
-    const [prompt, setPrompt] = useState<string | null>(null);
+    // Khởi tạo section mặc định là "me"
+    const [section, setSection] = useState<string>("me");
+    // Khởi tạo prompt mặc định theo section "me"
+    const [prompt, setPrompt] = useState<string | null>(sectionDefaultPrompts["me"]);
 
     const handleControl = (key: string) => {
         if (key.startsWith("__chat:")) {
-            // Người dùng nhập prompt thủ công
+            // Khi user nhập prompt thủ công
             setPrompt(key.replace("__chat:", ""));
         } else if (key.startsWith("__section:")) {
-            // Người dùng bấm nút chọn section
+            // Khi user bấm nút chọn section
             const secKey = key.replace("__section:", "");
             setSection(secKey);
-            // Gửi prompt mặc định tương ứng section
+            // Gửi prompt mặc định cho section được chọn
             setPrompt(sectionDefaultPrompts[secKey]);
         } else {
-            // Nếu key trực tiếp section
+            // Nếu key là section trực tiếp
             setSection(key);
-            setPrompt(null);
+            setPrompt(sectionDefaultPrompts[key] || null);
         }
     };
 
@@ -42,19 +45,10 @@ export default function Home() {
             >
                 <AvatarHeader />
             </Box>
-            <Flex
-                direction="column"
-                minH="100vh"
-                pos="relative"
-                bg="transparent"
-                zIndex={1}
-            >
+
+            <Flex direction="column" minH="100vh" pos="relative" bg="transparent" zIndex={1}>
                 <Flex flex="1" align="center" justify="center" pt="50px" pb="80px">
-                    <ChatBox
-                        section={section ?? ""}
-                        prompt={prompt}
-                        onPromptHandled={() => setPrompt(null)}
-                    />
+                    <ChatBox section={section} prompt={prompt} onPromptHandled={() => setPrompt(null)} />
                 </Flex>
                 <Box
                     pos="fixed"
