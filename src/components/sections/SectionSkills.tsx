@@ -1,6 +1,6 @@
 // src/sections/SectionSkills.tsx
-import { Box, Text, Wrap, WrapItem, Stack, HStack, Icon } from "@chakra-ui/react";
-import { FaCode, FaServer, FaCloud, FaDatabase, FaRobot, FaTools } from "react-icons/fa";
+import { Box, Text, Wrap, WrapItem, Stack, HStack, Icon, Badge } from "@chakra-ui/react";
+import { FaCode, FaServer, FaCloud, FaDatabase, FaRobot, FaTools, FaCertificate } from "react-icons/fa";
 
 const skillGroups = [
     {
@@ -54,13 +54,35 @@ const skillGroups = [
     },
 ];
 
+const certificates = [
+    {
+        label: "Azure Fundamentals AZ-900",
+        org: "Microsoft",
+    },
+    {
+        label: "Python Advanced",
+        org: "alfatraining Bildungszentrum",
+    },
+    {
+        label: "Certified Associate Python Programmer (PCAP)",
+        org: "Python Institute",
+    },
+    {
+        label: "Cloud Machine Learning Engineering & MLOps",
+        org: "Duke University (Coursera)",
+    },
+    {
+        label: "MLOps Internship Certificate",
+        org: "MotionsCloud",
+    },
+];
+
 export default function SectionSkills() {
     return (
         <Box p={[4, 6]} maxW="900px" mx="auto">
             <Text fontSize="2xl" fontWeight="bold" mb={7} letterSpacing={-0.5}>
                 Skills & Expertise
             </Text>
-
             <Stack gap={7}>
                 {skillGroups.map((group) => (
                     <Box key={group.title}>
@@ -91,6 +113,32 @@ export default function SectionSkills() {
                     </Box>
                 ))}
             </Stack>
+
+            <Box mt={9}>
+                <HStack mb={3} gap={2}>
+                    <Icon as={FaCertificate} boxSize={6} color="teal.500" />
+                    <Text fontSize="lg" fontWeight="semibold">
+                        Zertifikate
+                    </Text>
+                </HStack>
+                <Wrap gap={2}>
+                    {certificates.map(cert => (
+                        <WrapItem key={cert.label}>
+                            <Badge
+                                colorScheme="teal"
+                                variant="subtle"
+                                px={3}
+                                py={1}
+                                borderRadius="md"
+                                fontWeight="500"
+                                fontSize="sm"
+                            >
+                                {cert.label} – <Text as="span" color="teal.700">{cert.org}</Text>
+                            </Badge>
+                        </WrapItem>
+                    ))}
+                </Wrap>
+            </Box>
 
             <Text mt={8} color="gray.600" fontSize="md">
                 Hier findest du meine wichtigsten Kompetenzen – fokussiert auf moderne Entwicklung, Datenanalyse, KI und Cloud-Tools.<br />
