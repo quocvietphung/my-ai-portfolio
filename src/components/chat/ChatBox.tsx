@@ -53,21 +53,32 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
         // eslint-disable-next-line
     }, [prompt]);
 
+    // Khi chuyển section, luôn scroll lên đầu
     useEffect(() => {
         if (!chatRef.current) return;
-
         if (
-            chatHistory.length > 1 &&
-            getSectionFromPrompt(chatHistory[0].content)
+            chatHistory.length === 1 &&
+            getSectionFromPrompt(chatHistory[0]?.content)
         ) {
             chatRef.current.scrollTo({ top: 0, behavior: "smooth" });
-        } else {
+        }
+        // eslint-disable-next-line
+    }, [activeSection, chatHistory]);
+
+// Khi có hội thoại bình thường, scroll xuống đáy
+    useEffect(() => {
+        if (!chatRef.current) return;
+        if (
+            chatHistory.length > 1 &&
+            !getSectionFromPrompt(chatHistory[0]?.content)
+        ) {
             chatRef.current.scrollTo({
                 top: chatRef.current.scrollHeight,
                 behavior: "smooth",
             });
         }
-    }, [chatHistory, loading, showTopQuestion, activeSection]);
+        // eslint-disable-next-line
+    }, [chatHistory, loading, showTopQuestion]);
 
     useEffect(() => {
         if (chatHistory.length > 0 && chatHistory[0].role === "user" && pendingAnswer) {
