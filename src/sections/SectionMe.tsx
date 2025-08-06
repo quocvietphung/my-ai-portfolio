@@ -24,7 +24,7 @@ export default function SectionMe() {
                     position="relative"
                 >
                     <Image
-                        src="/images/avatar-viet.png" // Đảm bảo file tồn tại trong public/images/
+                        src="/assets/avatar-viet.png"
                         alt="Viet Phung"
                         fill
                         style={{ objectFit: "cover" }}
