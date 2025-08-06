@@ -35,11 +35,7 @@ const exampleQuestions = [
     },
 ];
 
-export default function SectionOther({
-                                         onQuestionClick,
-                                     }: {
-    onQuestionClick?: (prompt: string) => void;
-}) {
+export default function SectionOther() {
     return (
         <Box p={[4, 6]} maxW="800px" mx="auto">
             <VStack gap={6} align="start">
@@ -65,7 +61,7 @@ export default function SectionOther({
                                     size="lg"
                                     variant="subtle"
                                     borderRadius="full"
-                                    cursor="pointer"
+                                    cursor="default"
                                     fontWeight={600}
                                     fontSize="md"
                                     boxShadow="md"
@@ -80,7 +76,6 @@ export default function SectionOther({
                                     }}
                                     transition="all 0.18s"
                                     gap={2}
-                                    onClick={() => onQuestionClick?.(q.prompt)}
                                 >
                                     <Tag.StartElement>
                                         <Icon as={q.icon} color={q.color} boxSize={5} />
