@@ -9,8 +9,8 @@ import PersonalInfoRenderer from "./PersonalInfoRenderer";
 import { ChatMessage, sendChatMessage } from "@/services/chatService";
 import { PERSONAL_INFO_KEYWORDS_BY_SECTION, sections, sectionDefaultPrompts } from "@/constants/sections";
 
-const MotionFlex = motion(Flex);
-const MotionBox = motion(Box);
+const MotionFlex = motion.create(Flex);
+const MotionBox = motion.create(Box);
 
 function getSectionFromPrompt(prompt: string): string | null {
     const lower = prompt.toLowerCase().trim();
