@@ -11,7 +11,7 @@ import { PERSONAL_INFO_KEYWORDS_BY_SECTION, sections, sectionDefaultPrompts } fr
 
 const MotionFlex = motion.create(Flex);
 
-// Kiểm tra prompt thuộc section nào
+// Hàm xác định section từ prompt
 function getSectionFromPrompt(prompt: string): string | null {
     const lower = prompt.toLowerCase().trim();
     for (const [section, keywords] of Object.entries(PERSONAL_INFO_KEYWORDS_BY_SECTION)) {
@@ -25,22 +25,23 @@ function getSectionFromPrompt(prompt: string): string | null {
 }
 
 type ChatBoxProps = {
-    section: string;
     prompt?: string | null;
     onPromptHandled?: () => void;
 };
 
-export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxProps) {
+export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
     const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
     const [loading, setLoading] = useState(false);
     const [showTopQuestion, setShowTopQuestion] = useState(true);
     const chatRef = useRef<HTMLDivElement>(null);
     const [input, setInput] = useState("");
+    const [activeSection, setActiveSection] = useState<string>("me");
 
     useEffect(() => {
         if (prompt && prompt.trim()) {
             const promptSection = getSectionFromPrompt(prompt);
             if (promptSection) {
+                setActiveSection(promptSection);
                 setChatHistory([
                     { role: "user", content: prompt },
                     { role: "assistant", content: "" },
@@ -76,12 +77,17 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
 
     const handleSection = (key: string) => {
         setInput("");
+        setActiveSection(key);
         const prompt = sectionDefaultPrompts[key] || key;
-        handleChat(prompt);
+        setChatHistory([
+            { role: "user", content: prompt },
+            { role: "assistant", content: "" }
+        ]);
     };
 
     const handleChat = async (userPrompt: string) => {
         setLoading(true);
+        setActiveSection(getSectionFromPrompt(userPrompt) || activeSection);
         setChatHistory([{ role: "user", content: userPrompt }]);
         try {
             const assistantMessage = await sendChatMessage(userPrompt);
@@ -156,7 +162,7 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
 
                 <VStack gap={4} align="stretch" w="100%">
                     {chatHistory.length > 1 && getSectionFromPrompt(chatHistory[0].content) ? (
-                        <PersonalInfoRenderer section={section} />
+                        <PersonalInfoRenderer section={activeSection} />
                     ) : chatHistory.length === 0 ? (
                         <Text color="#aaa" textAlign="center" pt={6}>
                             Ask me anything!
@@ -227,7 +233,6 @@ export default function ChatBox({ section, prompt, onPromptHandled }: ChatBoxPro
                         ))}
                     </HStack>
                 </Flex>
-                {/* Chat Input */}
                 <Flex
                     bg="#f7f9fb"
                     borderRadius="full"
