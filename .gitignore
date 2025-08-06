@@ -14,6 +14,7 @@
 /coverage
 
 .idea
+.env.local
 # next.js
 /.next/
 /out/
