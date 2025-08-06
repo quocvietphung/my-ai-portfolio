@@ -15,6 +15,7 @@ export default function SectionMe() {
                     overflow="hidden"
                     boxSize="120px"
                     position="relative"
+                    boxShadow="0 4px 24px 0 rgba(0,0,0,0.09)"
                 >
                     <Image
                         src="/assets/avatar-viet.png"
@@ -27,15 +28,15 @@ export default function SectionMe() {
 
                 {/* Info */}
                 <Box>
-                    <Text fontSize="2xl" fontWeight="bold">
+                    <Text fontSize="2xl" fontWeight="bold" letterSpacing={0.5}>
                         Viet Phung
                     </Text>
                     <Text color="gray.600" mb={4} fontSize="lg">
-                        AI Consultant · Software Engineer
+                        AI Consultant&nbsp;·&nbsp;Software Engineer
                     </Text>
 
                     <Wrap gap={2}>
-                        {["AI", "Full-Stack", "Entrepreneurship", "SaaS Builder"].map(
+                        {["AI", "Full-Stack", "Entrepreneur", "SaaS Creator"].map(
                             (label) => (
                                 <WrapItem key={label}>
                                     <Text
@@ -45,7 +46,8 @@ export default function SectionMe() {
                                         borderRadius="full"
                                         bg="teal.100"
                                         color="teal.800"
-                                        fontWeight="medium"
+                                        fontWeight="semibold"
+                                        boxShadow="0 1px 4px 0 rgba(30,64,175,0.04)"
                                     >
                                         {label}
                                     </Text>
@@ -56,22 +58,31 @@ export default function SectionMe() {
                 </Box>
             </Flex>
 
-            {/* Kurzprofil nur auf Deutsch */}
-            <Text mt={7} fontSize="lg" lineHeight={1.85}>
-                Mein Name ist Viet&nbsp;–&nbsp;
-                <span role="img" aria-label="AI">🤖</span>&nbsp;
-                ich bin ein leidenschaftlicher Softwareentwickler im Bereich Machine Learning & Künstliche Intelligenz, aktuell lebend in Wuppertal, Deutschland.<br /><br />
+            {/* Kurzprofil - Modern, klar, mit Icons */}
+            <Box mt={7} fontSize="lg" lineHeight={1.85} color="gray.800">
+                <Text as="span" fontWeight="semibold" fontSize="xl">
+                    Mein Name ist Viet&nbsp;
+                </Text>
+                <span role="img" aria-label="AI">🤖</span> &nbsp;
+                <Text as="span">
+                    Ich bin ein begeisterter KI-Entwickler mit Herz für datengetriebene Innovationen – aktuell zuhause in Wuppertal, Deutschland.
+                </Text>
+                <br /><br />
 
-                <span role="img" aria-label="book">🎓</span> Ich habe Informatik in Deutschland studiert und verfüge über ein breites Wissen rund um Softwareentwicklung und moderne KI-Technologien.<br /><br />
+                <span role="img" aria-label="study">🎓</span> Informatik-Studium in Deutschland hat mir ein starkes Fundament für Software Engineering und moderne KI-Methoden gegeben.<br /><br />
 
-                <span role="img" aria-label="laptop">💻</span> Ursprünglich habe ich als Fullstack Software Engineer (Frontend & Backend) gearbeitet, doch heute widme ich mich mit Herzblut der KI und dem maschinellen Lernen. Deshalb fokussiere ich mich verstärkt auf Machine Learning und Deep Learning Projekte, um innovative, datenbasierte Lösungen zu entwickeln.<br /><br />
+                <span role="img" aria-label="code">💻</span> Mein Weg führte mich vom Fullstack Engineering (Frontend & Backend) hin zur Welt des Machine Learnings und Deep Learnings – meine Leidenschaft und Fokus der Zukunft.<br /><br />
 
-                <span role="img" aria-label="rocket">🚀</span> Mein großer Traum ist es, mit KI echte Produkte zu schaffen, die Menschen in ihrem Alltag und Beruf unterstützen&nbsp;–&nbsp;zum Beispiel durch smarte Anwendungen für Podcast- und Content-Creation. Ich finde es inspirierend, wenn Technologie neue Möglichkeiten eröffnet, kreative Ideen zum Leben zu erwecken.<br /><br />
+                <span role="img" aria-label="rocket">🚀</span> Mein Ziel: Mit KI-Technologien echte Mehrwerte schaffen. Ich entwickle smarte Anwendungen zur Podcast- & Content-Erstellung, die den Arbeitsalltag und kreativen Flow vieler Menschen bereichern.<br /><br />
 
-                <span role="img" aria-label="travel">🌍</span> Neben dem Programmieren reise ich gerne, entspanne mich bei <span role="img" aria-label="meditation">🧘</span> Meditation, zeichne kreativ <span role="img" aria-label="paint">🎨</span>, engagiere mich für soziale Aktivitäten <span role="img" aria-label="handshake">🤝</span> und produziere ab und zu spannende Videos oder interessante Inhalte rund um Tech und AI <span role="img" aria-label="video">🎬</span>. Diese Hobbys geben mir Inspiration und die nötige Balance für neue Herausforderungen.<br /><br />
+                <span role="img" aria-label="lightbulb">💡</span> Neue Technologien inspirieren mich, immer wieder Grenzen zu verschieben und innovative Lösungen umzusetzen.<br /><br />
 
-                Lassen Sie uns die Welt der KI gemeinsam gestalten und mit Leidenschaft neue Lösungen entdecken! <span role="img" aria-label="lightbulb">💡</span>
-            </Text>
+                <span role="img" aria-label="life">🌱</span> Neben Tech liebe ich Reisen, Meditation <span role="img" aria-label="meditation">🧘‍♂️</span>, kreatives Zeichnen <span role="img" aria-label="paint">🎨</span>, soziale Projekte <span role="img" aria-label="social">🤝</span> und produziere gern spannende Videos & Inhalte zu AI <span role="img" aria-label="video">🎬</span>.<br /><br />
+
+                <Text as="span" fontWeight="semibold" color="teal.600">
+                    Lassen Sie uns die Zukunft der Künstlichen Intelligenz gemeinsam gestalten!
+                </Text>
+            </Box>
         </Box>
     );
 }
