@@ -105,7 +105,6 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
 
     return (
         <Box
-            ref={chatRef}
             w={["80vw", "80vw", "80vw"]}
             h={["60vh", "60vh", "60vh"]}
             minW="300px"
@@ -122,7 +121,6 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
             fontSize="17px"
             display="flex"
             flexDirection="column"
-            overflowY="auto"
             zIndex={2}
             justifyContent="flex-end"
             position="absolute"
@@ -130,7 +128,7 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
             left="50%"
             transform="translate(-50%, -40%)"
         >
-            <Box flex="1" w="100%">
+            <Box flex="1" w="100%" minH={0} overflowY="auto" ref={chatRef}>
                 <AnimatePresence>
                     {chatHistory.length > 0 && chatHistory[0].role === "user" && showTopQuestion && (
                         <MotionFlex
