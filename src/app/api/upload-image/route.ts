@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile } from 'fs/promises';
+import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
-import { mkdir } from 'fs/promises';
 
 export async function POST(req: NextRequest) {
     const data = await req.formData();
-    const file = data.get('file') as File;
 
-    if (!file) {
-        return NextResponse.json({ error: 'No file uploaded.' }, { status: 400 });
+    const file = data.get('file') as File;
+    const filename = data.get('filename') as string;
+
+    if (!file || !filename) {
+        return NextResponse.json({ error: 'Missing file or filename.' }, { status: 400 });
     }
 
     const bytes = await file.arrayBuffer();
@@ -17,8 +18,10 @@ export async function POST(req: NextRequest) {
     const uploadDir = path.join(process.cwd(), 'public', 'assets');
     await mkdir(uploadDir, { recursive: true });
 
-    const filePath = path.join(uploadDir, 'avatar-memoji.png');
+    const safeFilename = filename.replace(/[^a-z0-9_.-]/gi, '_');
+    const filePath = path.join(uploadDir, safeFilename);
+
     await writeFile(filePath, buffer);
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, path: `/assets/${safeFilename}` });
 }
