@@ -9,7 +9,8 @@ import PersonalInfoRenderer from "./PersonalInfoRenderer";
 import { ChatMessage, sendChatMessage } from "@/services/chatService";
 import { PERSONAL_INFO_KEYWORDS_BY_SECTION, sections, sectionDefaultPrompts } from "@/constants/sections";
 
-const MotionFlex = motion.create(Flex);
+const MotionFlex = motion(Flex);
+const MotionBox = motion(Box);
 
 function getSectionFromPrompt(prompt: string): string | null {
     const lower = prompt.toLowerCase().trim();
@@ -31,7 +32,8 @@ type ChatBoxProps = {
 export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
     const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
     const [loading, setLoading] = useState(false);
-    const [showTopQuestion, setShowTopQuestion] = useState(true);
+    const [showTopQuestion, setShowTopQuestion] = useState(false);
+    const [pendingAnswer, setPendingAnswer] = useState<ChatMessage | null>(null);
     const chatRef = useRef<HTMLDivElement>(null);
     const [input, setInput] = useState("");
     const [activeSection, setActiveSection] = useState<string>("me");
@@ -42,34 +44,41 @@ export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
             if (promptSection) {
                 setActiveSection(promptSection);
                 setChatHistory([
-                    { role: "user", content: prompt },
-                    { role: "assistant", content: "" },
+                    { role: "user", content: prompt }
                 ]);
+                handleChat(prompt);
             } else {
                 handleChat(prompt);
             }
             onPromptHandled?.();
         }
+        // eslint-disable-next-line
     }, [prompt]);
 
     useEffect(() => {
         if (chatRef.current) {
             chatRef.current.scrollTop = chatRef.current.scrollHeight;
         }
-    }, [chatHistory, loading]);
+    }, [chatHistory, loading, showTopQuestion]);
 
     useEffect(() => {
-        if (chatHistory.length > 0 && chatHistory[0].role === "user") {
+        if (chatHistory.length > 0 && chatHistory[0].role === "user" && pendingAnswer) {
             setShowTopQuestion(true);
             const timer = setTimeout(() => {
                 setShowTopQuestion(false);
-            }, 1500);
+                setChatHistory([
+                    chatHistory[0],
+                    pendingAnswer
+                ]);
+                setPendingAnswer(null);
+            }, 1000);
             return () => clearTimeout(timer);
         }
-    }, [chatHistory]);
+    }, [pendingAnswer]);
 
     const handleSend = () => {
         if (!input.trim()) return;
+        setChatHistory([{ role: "user", content: input.trim() }]);
         handleChat(input.trim());
         setInput("");
     };
@@ -79,26 +88,24 @@ export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
         setActiveSection(key);
         const prompt = sectionDefaultPrompts[key] || key;
         setChatHistory([
-            { role: "user", content: prompt },
-            { role: "assistant", content: "" }
+            { role: "user", content: prompt }
         ]);
+        handleChat(prompt);
     };
 
     const handleChat = async (userPrompt: string) => {
         setLoading(true);
+        setShowTopQuestion(true);
+        setPendingAnswer(null);
         setActiveSection(getSectionFromPrompt(userPrompt) || activeSection);
-        setChatHistory([{ role: "user", content: userPrompt }]);
         try {
             const assistantMessage = await sendChatMessage(userPrompt);
-            setChatHistory([
-                { role: "user", content: userPrompt },
-                assistantMessage,
-            ]);
+            setPendingAnswer(assistantMessage);
         } catch (error) {
-            setChatHistory([
-                { role: "user", content: userPrompt },
-                { role: "assistant", content: "Error: Could not get response." },
-            ]);
+            setPendingAnswer({
+                role: "assistant",
+                content: "Error: Could not get response."
+            });
         }
         setLoading(false);
     };
@@ -128,20 +135,22 @@ export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
             position="absolute"
             top="50%"
             left="50%"
-            transform="translate(-50%, -50%)"
+            transform="translate(-50%, -40%)"
         >
             <Box flex="1" w="100%">
+                {/* Bubble hỏi: hiệu ứng phải -> trái */}
                 <AnimatePresence>
                     {chatHistory.length > 0 && chatHistory[0].role === "user" && showTopQuestion && (
                         <MotionFlex
+                            key="question"
                             w="100%"
                             justify="center"
                             mb={3}
                             mt={0}
-                            initial={{ opacity: 0, y: -20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.4 }}
+                            initial={{ opacity: 0, x: 40 }}      // từ phải vào
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -40 }}        // sang trái khi biến mất
+                            transition={{ duration: 0.45, ease: "easeInOut" }}
                         >
                             <Text
                                 fontSize={["16px", "18px", "20px"]}
@@ -166,42 +175,64 @@ export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
                 </AnimatePresence>
 
                 <VStack gap={4} align="stretch" w="100%">
-                    {chatHistory.length > 1 && getSectionFromPrompt(chatHistory[0].content) ? (
-                        <PersonalInfoRenderer section={activeSection} />
-                    ) : chatHistory.length === 0 ? (
+                    {/* Section info cũng animate: fade + slide */}
+                    <AnimatePresence>
+                        {!showTopQuestion && chatHistory.length > 1 && getSectionFromPrompt(chatHistory[0].content) && (
+                            <MotionBox
+                                key="section-info"
+                                initial={{ opacity: 0, x: -40 }}      // từ trái vào
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: 40 }}
+                                transition={{ duration: 0.5, ease: "easeInOut" }}
+                            >
+                                <PersonalInfoRenderer section={activeSection} />
+                            </MotionBox>
+                        )}
+                    </AnimatePresence>
+
+                    {/* Assistant answer: hiệu ứng từ trái sang phải */}
+                    <AnimatePresence>
+                        {!showTopQuestion && chatHistory.length > 1 && !getSectionFromPrompt(chatHistory[0].content) && (
+                            <motion.div
+                                key={chatHistory[1].content}
+                                initial={{ opacity: 0, x: -40 }}      // từ trái vào
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: 40 }}
+                                transition={{ duration: 0.5, ease: "easeInOut" }}
+                            >
+                                <Text
+                                    color="#185ca8"
+                                    fontWeight={600}
+                                    fontSize="17px"
+                                    px="32px"
+                                    py="15px"
+                                    maxW="100%"
+                                    whiteSpace="pre-line"
+                                    textAlign="justify"
+                                    style={{ flex: 1 }}
+                                >
+                                    <Typewriter
+                                        words={[chatHistory[1].content]}
+                                        loop={1}
+                                        cursor={false}
+                                        typeSpeed={20}
+                                        deleteSpeed={0}
+                                        delaySpeed={1000}
+                                    />
+                                </Text>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    {/* Không có gì -> hướng dẫn */}
+                    {chatHistory.length === 0 && (
                         <Text color="#aaa" textAlign="center" pt={6}>
                             Ask me anything!
                         </Text>
-                    ) : (
-                        chatHistory.slice(1).map(
-                            (m, i) =>
-                                m.role === "assistant" && (
-                                    <Text
-                                        key={m.content}
-                                        color="#185ca8"
-                                        fontWeight={600}
-                                        fontSize="17px"
-                                        px="32px"
-                                        py="15px"
-                                        maxW="100%"
-                                        whiteSpace="pre-line"
-                                        textAlign="justify"
-                                        style={{ flex: 1 }}
-                                    >
-                                        <Typewriter
-                                            words={[m.content]}
-                                            loop={1}
-                                            cursor={false}
-                                            typeSpeed={20}
-                                            deleteSpeed={0}
-                                            delaySpeed={1000}
-                                        />
-                                    </Text>
-                                )
-                        )
                     )}
 
-                    {loading && (
+                    {/* Loading/thinking */}
+                    {(loading || (showTopQuestion && pendingAnswer)) && (
                         <Flex
                             align="center"
                             justify="flex-start"
@@ -218,6 +249,7 @@ export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
                 </VStack>
             </Box>
 
+            {/* Controls */}
             <Box mt={4}>
                 <Flex justify="center" mb={2}>
                     <HStack gap={2} wrap="wrap">
