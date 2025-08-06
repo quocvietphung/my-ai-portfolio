@@ -1,10 +1,15 @@
 "use client";
+
+import { useState } from "react";
 import { Box, Flex } from "@chakra-ui/react";
 import ParticlesBackground from "@/components/chat/ParticlesBackground";
 import AvatarHeader from "@/components/chat/AvatarHeader";
 import ChatBox from "@/components/chat/ChatBox";
+import { sectionDefaultPrompts } from "@/constants/sections";
 
 export default function Home() {
+    const [prompt, setPrompt] = useState<string | null>(sectionDefaultPrompts["me"]);
+
     return (
         <>
             <ParticlesBackground />
@@ -21,7 +26,10 @@ export default function Home() {
                     <AvatarHeader />
                 </Box>
                 <Flex flex="1" align="flex-start" justify="center" pt="0" pb="0">
-                    <ChatBox />
+                    <ChatBox
+                        prompt={prompt}
+                        onPromptHandled={() => setPrompt(null)}
+                    />
                 </Flex>
             </Flex>
         </>

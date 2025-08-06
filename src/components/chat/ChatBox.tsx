@@ -11,6 +11,7 @@ import { PERSONAL_INFO_KEYWORDS_BY_SECTION, sections, sectionDefaultPrompts } fr
 
 const MotionFlex = motion.create(Flex);
 
+// Hàm xác định section từ prompt
 function getSectionFromPrompt(prompt: string): string | null {
     const lower = prompt.toLowerCase().trim();
     for (const [section, keywords] of Object.entries(PERSONAL_INFO_KEYWORDS_BY_SECTION)) {
@@ -23,52 +24,34 @@ function getSectionFromPrompt(prompt: string): string | null {
     return null;
 }
 
-export default function ChatBox() {
-    const [section, setSection] = useState<string>("me");
-    const [prompt, setPrompt] = useState<string>(sectionDefaultPrompts["me"] || "Who are you?");
-    const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
-        { role: "user", content: sectionDefaultPrompts["me"] || "Who are you?" },
-        { role: "assistant", content: "" }
-    ]);
+type ChatBoxProps = {
+    prompt?: string | null;
+    onPromptHandled?: () => void;
+};
+
+export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
+    const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
     const [loading, setLoading] = useState(false);
     const [showTopQuestion, setShowTopQuestion] = useState(true);
     const chatRef = useRef<HTMLDivElement>(null);
     const [input, setInput] = useState("");
+    const [activeSection, setActiveSection] = useState<string>("me");
 
-    const handleSection = (key: string) => {
-        const newPrompt = sectionDefaultPrompts[key] || key;
-        setSection(key);
-        setPrompt(newPrompt);
-        setInput("");
-        setChatHistory([
-            { role: "user", content: newPrompt },
-            { role: "assistant", content: "" }
-        ]);
-    };
-
-    const handleSend = () => {
-        if (!input.trim()) return;
-        handleChat(input.trim());
-        setInput("");
-    };
-
-    const handleChat = async (userPrompt: string) => {
-        setLoading(true);
-        setChatHistory([{ role: "user", content: userPrompt }]);
-        try {
-            const assistantMessage = await sendChatMessage(userPrompt);
-            setChatHistory([
-                { role: "user", content: userPrompt },
-                assistantMessage,
-            ]);
-        } catch (error) {
-            setChatHistory([
-                { role: "user", content: userPrompt },
-                { role: "assistant", content: "Error: Could not get response." },
-            ]);
+    useEffect(() => {
+        if (prompt && prompt.trim()) {
+            const promptSection = getSectionFromPrompt(prompt);
+            if (promptSection) {
+                setActiveSection(promptSection);
+                setChatHistory([
+                    { role: "user", content: prompt },
+                    { role: "assistant", content: "" },
+                ]);
+            } else {
+                handleChat(prompt);
+            }
+            onPromptHandled?.();
         }
-        setLoading(false);
-    };
+    }, [prompt]);
 
     useEffect(() => {
         if (chatRef.current) {
@@ -85,6 +68,41 @@ export default function ChatBox() {
             return () => clearTimeout(timer);
         }
     }, [chatHistory]);
+
+    const handleSend = () => {
+        if (!input.trim()) return;
+        handleChat(input.trim());
+        setInput("");
+    };
+
+    const handleSection = (key: string) => {
+        setInput("");
+        setActiveSection(key);
+        const prompt = sectionDefaultPrompts[key] || key;
+        setChatHistory([
+            { role: "user", content: prompt },
+            { role: "assistant", content: "" }
+        ]);
+    };
+
+    const handleChat = async (userPrompt: string) => {
+        setLoading(true);
+        setActiveSection(getSectionFromPrompt(userPrompt) || activeSection);
+        setChatHistory([{ role: "user", content: userPrompt }]);
+        try {
+            const assistantMessage = await sendChatMessage(userPrompt);
+            setChatHistory([
+                { role: "user", content: userPrompt },
+                assistantMessage,
+            ]);
+        } catch (error) {
+            setChatHistory([
+                { role: "user", content: userPrompt },
+                { role: "assistant", content: "Error: Could not get response." },
+            ]);
+        }
+        setLoading(false);
+    };
 
     return (
         <Box
@@ -143,10 +161,9 @@ export default function ChatBox() {
                 </AnimatePresence>
 
                 <VStack gap={4} align="stretch" w="100%">
-                    {/* Luôn render info theo section */}
-                    <PersonalInfoRenderer section={section} />
-
-                    {chatHistory.length === 0 ? (
+                    {chatHistory.length > 1 && getSectionFromPrompt(chatHistory[0].content) ? (
+                        <PersonalInfoRenderer section={activeSection} />
+                    ) : chatHistory.length === 0 ? (
                         <Text color="#aaa" textAlign="center" pt={6}>
                             Ask me anything!
                         </Text>
@@ -202,7 +219,7 @@ export default function ChatBox() {
                         {sections.map((s) => (
                             <Button
                                 key={s.key}
-                                variant={section === s.key ? "solid" : "ghost"}
+                                variant="ghost"
                                 colorScheme="teal"
                                 fontWeight="600"
                                 size="sm"
