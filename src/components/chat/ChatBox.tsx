@@ -40,20 +40,21 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
 
     useEffect(() => {
         if (prompt && prompt.trim()) {
-            const promptSection = getSectionFromPrompt(prompt);
-            if (promptSection) {
-                setActiveSection(promptSection);
-                setChatHistory([{ role: "user", content: prompt }]);
-                handleChat(prompt);
-            } else {
-                handleChat(prompt);
-            }
-            onPromptHandledAction?.();
+            (async () => {
+                const promptSection = getSectionFromPrompt(prompt);
+                if (promptSection) {
+                    setActiveSection(promptSection);
+                    setChatHistory([{ role: "user", content: prompt }]);
+                    await handleChat(prompt);
+                } else {
+                    await handleChat(prompt);
+                }
+                onPromptHandledAction?.();
+            })();
         }
         // eslint-disable-next-line
     }, [prompt]);
 
-    // Khi chuyển section, luôn scroll lên đầu
     useEffect(() => {
         if (!chatRef.current) return;
         if (
@@ -95,7 +96,7 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
     const handleSend = () => {
         if (!input.trim()) return;
         setChatHistory([{ role: "user", content: input.trim() }]);
-        handleChat(input.trim());
+        void handleChat(input.trim());
         setInput("");
     };
 
@@ -104,7 +105,7 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
         setActiveSection(key);
         const prompt = sectionDefaultPrompts[key] || key;
         setChatHistory([{ role: "user", content: prompt }]);
-        handleChat(prompt);
+        void handleChat(prompt);
     };
 
     const handleChat = async (userPrompt: string) => {
