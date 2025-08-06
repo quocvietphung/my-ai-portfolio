@@ -11,7 +11,6 @@ import { PERSONAL_INFO_KEYWORDS_BY_SECTION, sections, sectionDefaultPrompts } fr
 
 const MotionFlex = motion.create(Flex);
 
-// Hàm xác định section từ prompt
 function getSectionFromPrompt(prompt: string): string | null {
     const lower = prompt.toLowerCase().trim();
     for (const [section, keywords] of Object.entries(PERSONAL_INFO_KEYWORDS_BY_SECTION)) {
