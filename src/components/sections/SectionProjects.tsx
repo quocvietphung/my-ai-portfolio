@@ -32,7 +32,7 @@ const projects = [
     {
         title: "Objekterkennung mit Deep Learning (TensorFlow, CNN)",
         icon: FaSearch,
-        time: "2024",
+        time: "2025",
         tags: [
             { label: "TensorFlow", icon: LuFileBadge },
             { label: "YOLO" },
@@ -45,7 +45,7 @@ const projects = [
     {
         title: "Annotation Tool für AI-Research",
         icon: FaRobot,
-        time: "2024",
+        time: "2021-2022",
         tags: [
             { label: "Java" },
             { label: "Docker" },
@@ -57,7 +57,7 @@ const projects = [
     {
         title: "Weitere Projekte & Tools",
         icon: FaTools,
-        time: "2023–2024",
+        time: "2022–2023",
         tags: [
             { label: "Spring Boot" },
             { label: "CI/CD" },
