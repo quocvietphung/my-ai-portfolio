@@ -9,8 +9,8 @@ import PersonalInfoRenderer from "./PersonalInfoRenderer";
 import { ChatMessage, sendChatMessage } from "@/services/chatService";
 import { PERSONAL_INFO_KEYWORDS_BY_SECTION, sections, sectionDefaultPrompts } from "@/constants/sections";
 
-const MotionFlex = motion(Flex);
-const MotionBox = motion(Box);
+const MotionFlex = motion.create(Flex);
+const MotionBox = motion.create(Box);
 
 function getSectionFromPrompt(prompt: string): string | null {
     const lower = prompt.toLowerCase().trim();
@@ -40,23 +40,45 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
 
     useEffect(() => {
         if (prompt && prompt.trim()) {
-            const promptSection = getSectionFromPrompt(prompt);
-            if (promptSection) {
-                setActiveSection(promptSection);
-                setChatHistory([{ role: "user", content: prompt }]);
-                handleChat(prompt);
-            } else {
-                handleChat(prompt);
-            }
-            onPromptHandledAction?.();
+            (async () => {
+                const promptSection = getSectionFromPrompt(prompt);
+                if (promptSection) {
+                    setActiveSection(promptSection);
+                    setChatHistory([{ role: "user", content: prompt }]);
+                    await handleChat(prompt);
+                } else {
+                    await handleChat(prompt);
+                }
+                onPromptHandledAction?.();
+            })();
         }
         // eslint-disable-next-line
     }, [prompt]);
 
     useEffect(() => {
-        if (chatRef.current) {
-            chatRef.current.scrollTop = chatRef.current.scrollHeight;
+        if (!chatRef.current) return;
+        if (
+            chatHistory.length === 1 &&
+            getSectionFromPrompt(chatHistory[0]?.content)
+        ) {
+            chatRef.current.scrollTo({ top: 0, behavior: "smooth" });
         }
+        // eslint-disable-next-line
+    }, [activeSection, chatHistory]);
+
+// Khi có hội thoại bình thường, scroll xuống đáy
+    useEffect(() => {
+        if (!chatRef.current) return;
+        if (
+            chatHistory.length > 1 &&
+            !getSectionFromPrompt(chatHistory[0]?.content)
+        ) {
+            chatRef.current.scrollTo({
+                top: chatRef.current.scrollHeight,
+                behavior: "smooth",
+            });
+        }
+        // eslint-disable-next-line
     }, [chatHistory, loading, showTopQuestion]);
 
     useEffect(() => {
@@ -74,7 +96,7 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
     const handleSend = () => {
         if (!input.trim()) return;
         setChatHistory([{ role: "user", content: input.trim() }]);
-        handleChat(input.trim());
+        void handleChat(input.trim());
         setInput("");
     };
 
@@ -83,7 +105,7 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
         setActiveSection(key);
         const prompt = sectionDefaultPrompts[key] || key;
         setChatHistory([{ role: "user", content: prompt }]);
-        handleChat(prompt);
+        void handleChat(prompt);
     };
 
     const handleChat = async (userPrompt: string) => {
@@ -105,7 +127,6 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
 
     return (
         <Box
-            ref={chatRef}
             w={["80vw", "80vw", "80vw"]}
             h={["60vh", "60vh", "60vh"]}
             minW="300px"
@@ -122,7 +143,6 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
             fontSize="17px"
             display="flex"
             flexDirection="column"
-            overflowY="auto"
             zIndex={2}
             justifyContent="flex-end"
             position="absolute"
@@ -130,7 +150,7 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
             left="50%"
             transform="translate(-50%, -40%)"
         >
-            <Box flex="1" w="100%">
+            <Box flex="1" w="100%" minH={0} overflowY="auto" ref={chatRef}>
                 <AnimatePresence>
                     {chatHistory.length > 0 && chatHistory[0].role === "user" && showTopQuestion && (
                         <MotionFlex
