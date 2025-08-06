@@ -106,8 +106,6 @@ export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
     return (
         <Box
             ref={chatRef}
-            w={["80vw", "80vw", "80vw"]}
-            h={["90vh", "90vh", "90vh"]}
             minW="300px"
             maxW="1200px"
             minH="420px"
