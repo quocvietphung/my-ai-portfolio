@@ -273,7 +273,7 @@ export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
                 <Flex
                     bg="#f7f9fb"
                     borderRadius="full"
-                    px={6}              // Tăng padding ngang
+                    px={6}
                     py={3}
                     boxShadow="0 1px 6px rgba(0,0,0,0.03)"
                     align="center"
