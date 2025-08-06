@@ -1,12 +1,6 @@
 // src/sections/SectionMe.tsx
 import Image from "next/image";
-import {
-    Box,
-    Flex,
-    Text,
-    Wrap,
-    WrapItem,
-} from "@chakra-ui/react";
+import { Box, Flex, Text, Wrap, WrapItem } from "@chakra-ui/react";
 
 export default function SectionMe() {
     return (
@@ -16,12 +10,12 @@ export default function SectionMe() {
                 align={{ md: "center" }}
                 gap={6}
             >
-                {/* Avatar with next/image */}
+                {/* Avatar square with next/image */}
                 <Box
-                    borderRadius="full"
                     overflow="hidden"
                     boxSize="120px"
                     position="relative"
+                    // Không bo tròn
                 >
                     <Image
                         src="/assets/avatar-viet.png"
