@@ -138,7 +138,6 @@ export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
             transform="translate(-50%, -40%)"
         >
             <Box flex="1" w="100%">
-                {/* Bubble hỏi: hiệu ứng phải -> trái */}
                 <AnimatePresence>
                     {chatHistory.length > 0 && chatHistory[0].role === "user" && showTopQuestion && (
                         <MotionFlex
@@ -147,9 +146,9 @@ export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
                             justify="center"
                             mb={3}
                             mt={0}
-                            initial={{ opacity: 0, x: 40 }}      // từ phải vào
+                            initial={{ opacity: 0, x: 40 }}
                             animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -40 }}        // sang trái khi biến mất
+                            exit={{ opacity: 0, x: -40 }}
                             transition={{ duration: 0.45, ease: "easeInOut" }}
                         >
                             <Text
@@ -175,12 +174,11 @@ export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
                 </AnimatePresence>
 
                 <VStack gap={4} align="stretch" w="100%">
-                    {/* Section info cũng animate: fade + slide */}
                     <AnimatePresence>
                         {!showTopQuestion && chatHistory.length > 1 && getSectionFromPrompt(chatHistory[0].content) && (
                             <MotionBox
                                 key="section-info"
-                                initial={{ opacity: 0, x: -40 }}      // từ trái vào
+                                initial={{ opacity: 0, x: -40 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: 40 }}
                                 transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -190,12 +188,11 @@ export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
                         )}
                     </AnimatePresence>
 
-                    {/* Assistant answer: hiệu ứng từ trái sang phải */}
                     <AnimatePresence>
                         {!showTopQuestion && chatHistory.length > 1 && !getSectionFromPrompt(chatHistory[0].content) && (
                             <motion.div
                                 key={chatHistory[1].content}
-                                initial={{ opacity: 0, x: -40 }}      // từ trái vào
+                                initial={{ opacity: 0, x: -40 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: 40 }}
                                 transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -224,7 +221,6 @@ export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
                         )}
                     </AnimatePresence>
 
-                    {/* Không có gì -> hướng dẫn */}
                     {chatHistory.length === 0 && (
                         <Text color="#aaa" textAlign="center" pt={6}>
                             Ask me anything!
