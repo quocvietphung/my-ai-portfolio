@@ -9,7 +9,7 @@ import { ChatMessage, sendChatMessage } from "../services/chatService";
 import PersonalInfoRenderer from "./PersonalInfoRenderer";
 import { PERSONAL_INFO_KEYWORDS_BY_SECTION } from "../constants/sections"
 
-const MotionFlex = motion(Flex);
+const MotionFlex = motion.create(Flex);
 
 // Kiểm tra prompt thuộc section nào
 function getSectionFromPrompt(prompt: string): string | null {

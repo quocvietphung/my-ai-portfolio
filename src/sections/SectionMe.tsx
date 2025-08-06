@@ -1,6 +1,7 @@
 // src/sections/SectionMe.tsx
 import Image from "next/image";
 import { Box, Flex, Text, Wrap, WrapItem } from "@chakra-ui/react";
+import { Tag } from "@chakra-ui/react"
 
 export default function SectionMe() {
     return (
