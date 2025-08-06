@@ -106,12 +106,14 @@ export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
     return (
         <Box
             ref={chatRef}
-            w="90vw"
-            minW="0"
-            maxW="680px"
-            mx="auto"
+            w={["80vw", "80vw", "80vw"]}
+            h={["90vh", "90vh", "90vh"]}
+            minW="300px"
+            maxW="1200px"
             minH="420px"
-            maxH="70vh"
+            maxH="900px"
+            mx="auto"
+            my="auto"
             bg="#fff"
             border="1.5px solid #e5e7eb"
             borderRadius="2xl"
@@ -123,6 +125,10 @@ export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
             overflowY="auto"
             zIndex={2}
             justifyContent="flex-end"
+            position="absolute"
+            top="50%"
+            left="50%"
+            transform="translate(-50%, -50%)"
         >
             <Box flex="1" w="100%">
                 <AnimatePresence>
