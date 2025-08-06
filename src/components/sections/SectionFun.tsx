@@ -1,15 +1,46 @@
 // src/sections/SectionFun.tsx
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, Image, VStack, HStack, Icon } from "@chakra-ui/react";
+import { FaParachuteBox, FaLeaf } from "react-icons/fa";
+import { MdSelfImprovement } from "react-icons/md";
 
 export default function SectionFun() {
     return (
         <Box p={6}>
-            <Text fontSize="lg" fontWeight="semibold" mb={2}>
-                Fun
-            </Text>
-            <Text>
-                I enjoy coding, hiking, and playing chess in my free time.
-            </Text>
+            <HStack mb={3} gap={2}>
+                <Icon as={FaParachuteBox} boxSize={7} color="teal.500" />
+                <Text fontSize="xl" fontWeight="bold">
+                    Inspiration & Abenteuer
+                </Text>
+            </HStack>
+            <VStack align="start" gap={6}>
+                <Text fontSize="md">
+                    Mein eindrucksvollstes Erlebnis? <b>Fallschirmspringen in der Schweiz</b> <span role="img" aria-label="Fallschirm">🪂</span>.<br />
+                    Im Tandemsprung aus 1.500 Metern über Interlaken – die Alpen unter mir – habe ich nicht nur den ultimativen Adrenalinkick gespürt, sondern auch gelernt, was es heißt, mutig loszulassen und den Moment voll auszukosten. Diese Erfahrung begleitet mich und gibt mir bis heute Energie und Zuversicht!
+                </Text>
+                <Image
+                    src="/assets/fun1.jpg"
+                    alt="Fallschirmspringen über Interlaken"
+                    borderRadius="2xl"
+                    boxShadow="xl"
+                    maxW="420px"
+                    transition="transform 0.3s"
+                    _hover={{ transform: "scale(1.05)", boxShadow: "2xl" }}
+                />
+                <Text fontSize="md">
+                    <span role="img" aria-label="Herz">💚</span> Genauso wichtig wie Abenteuer sind mir <b>soziales Engagement</b> und <b>Achtsamkeit</b> <Icon as={MdSelfImprovement} ml={1} color="teal.400" />.<br />
+                    Ob inspirierende Begegnungen, freiwillige Projekte oder Momente der Stille bei Meditation – all das schenkt mir innere Klarheit, neue Perspektiven und kreative Energie. <br />
+                    Diese Erlebnisse motivieren mich, neugierig zu bleiben, offen zu denken und auch im Job immer wieder mutig neue Wege zu gehen.
+                </Text>
+                <Image
+                    src="/assets/fun2.jpg"
+                    alt="Soziales Engagement oder Meditation"
+                    borderRadius="2xl"
+                    boxShadow="xl"
+                    maxW="420px"
+                    transition="transform 0.3s"
+                    _hover={{ transform: "scale(1.05)", boxShadow: "2xl" }}
+                />
+            </VStack>
         </Box>
     );
 }
