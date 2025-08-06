@@ -58,29 +58,31 @@ export default function SectionMe() {
                 </Box>
             </Flex>
 
-            {/* Kurzprofil - Modern, klar, mit Icons */}
             <Box mt={7} fontSize="lg" lineHeight={1.85} color="gray.800">
                 <Text as="span" fontWeight="semibold" fontSize="xl">
                     Mein Name ist Viet&nbsp;
                 </Text>
-                <span role="img" aria-label="AI">🤖</span> &nbsp;
+                <span role="img" aria-label="AI">🤖</span>
                 <Text as="span">
-                    Ich bin ein begeisterter KI-Entwickler mit Herz für datengetriebene Innovationen – aktuell zuhause in Wuppertal, Deutschland.
+                    &nbsp;– Softwareentwickler mit Herz für KI, neugierig und offen für neue Wege. Mein Lebensmittelpunkt ist Wuppertal, Deutschland.
                 </Text>
                 <br /><br />
 
-                <span role="img" aria-label="study">🎓</span> Informatik-Studium in Deutschland hat mir ein starkes Fundament für Software Engineering und moderne KI-Methoden gegeben.<br /><br />
+                <span role="img" aria-label="code">💻 </span>
+                In den letzten Jahren habe ich als Software Engineer vielseitige Erfahrungen gesammelt. <br />
+                Ich bin dankbar für diese Möglichkeiten – für jedes Projekt, jedes Team, jede Herausforderung, die mich ein Stück weitergebracht haben.<br /><br />
 
-                <span role="img" aria-label="code">💻</span> Mein Weg führte mich vom Fullstack Engineering (Frontend & Backend) hin zur Welt des Machine Learnings und Deep Learnings – meine Leidenschaft und Fokus der Zukunft.<br /><br />
+                <span role="img" aria-label="rocket">🚀 </span>
+                Jetzt freue ich mich darauf, mein Wissen im Bereich Machine Learning und Künstliche Intelligenz weiter auszubauen. Mein Wunsch ist es, gemeinsam mit anderen Lösungen zu entwickeln, die den Alltag bereichern und echten Mehrwert schaffen.<br /><br />
 
-                <span role="img" aria-label="rocket">🚀</span> Mein Ziel: Mit KI-Technologien echte Mehrwerte schaffen. Ich entwickle smarte Anwendungen zur Podcast- & Content-Erstellung, die den Arbeitsalltag und kreativen Flow vieler Menschen bereichern.<br /><br />
+                <span role="img" aria-label="lightbulb">💡 </span>
+                Für mich stehen der offene Austausch, gemeinsames Lernen und gegenseitige Inspiration im Mittelpunkt. Ich glaube daran, dass Innovation aus Teamgeist und Begeisterung entsteht.<br /><br />
 
-                <span role="img" aria-label="lightbulb">💡</span> Neue Technologien inspirieren mich, immer wieder Grenzen zu verschieben und innovative Lösungen umzusetzen.<br /><br />
-
-                <span role="img" aria-label="life">🌱</span> Neben Tech liebe ich Reisen, Meditation <span role="img" aria-label="meditation">🧘‍♂️</span>, kreatives Zeichnen <span role="img" aria-label="paint">🎨</span>, soziale Projekte <span role="img" aria-label="social">🤝</span> und produziere gern spannende Videos & Inhalte zu AI <span role="img" aria-label="video">🎬</span>.<br /><br />
+                <span role="img" aria-label="life">🌱 </span>
+                Meine Auszeiten finde ich beim Reisen, in der Meditation <span role="img" aria-label="meditation">🧘‍♂️</span>, beim Zeichnen <span role="img" aria-label="paint">🎨</span> oder wenn ich neue Ideen in kleinen Videos <span role="img" aria-label="video">🎬</span> festhalte.<br /><br />
 
                 <Text as="span" fontWeight="semibold" color="teal.600">
-                    Lassen Sie uns die Zukunft der Künstlichen Intelligenz gemeinsam gestalten!
+                    Ich freue mich auf neue Kontakte, Inspiration und gemeinsame Projekte rund um KI!
                 </Text>
             </Box>
         </Box>

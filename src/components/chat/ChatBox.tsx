@@ -54,10 +54,20 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
     }, [prompt]);
 
     useEffect(() => {
-        if (chatRef.current) {
-            chatRef.current.scrollTop = chatRef.current.scrollHeight;
+        if (!chatRef.current) return;
+
+        if (
+            chatHistory.length > 1 &&
+            getSectionFromPrompt(chatHistory[0].content)
+        ) {
+            chatRef.current.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+            chatRef.current.scrollTo({
+                top: chatRef.current.scrollHeight,
+                behavior: "smooth",
+            });
         }
-    }, [chatHistory, loading, showTopQuestion]);
+    }, [chatHistory, loading, showTopQuestion, activeSection]);
 
     useEffect(() => {
         if (chatHistory.length > 0 && chatHistory[0].role === "user" && pendingAnswer) {
