@@ -1,56 +1,64 @@
-// src/sections/SectionSkills.tsx
 import { Box, Text, Wrap, WrapItem, Stack, HStack, Icon, Badge } from "@chakra-ui/react";
-import { FaCode, FaServer, FaCloud, FaDatabase, FaRobot, FaTools, FaCertificate } from "react-icons/fa";
+import {
+    FaCode, FaServer, FaCloud, FaDatabase, FaRobot, FaTools, FaCertificate
+} from "react-icons/fa";
+
+// Pastel color mapping for each skill group
+const pastelColors: Record<string, string> = {
+    Frontend: "#b2f5ea",
+    Backend: "#bee3f8",
+    Webentwicklung: "#fbb6ce",
+    "Cloud & DevOps": "#fbcfe8",
+    Datenanalyse: "#fefcbf",
+    "Machine Learning": "#c4b5fd",
+    Tools: "#fde68a",
+};
+
+const textColors: Record<string, string> = {
+    Frontend: "#234e52",
+    Backend: "#1a365d",
+    Webentwicklung: "#97266d",
+    "Cloud & DevOps": "#8b5cf6",
+    Datenanalyse: "#975a16",
+    "Machine Learning": "#4c1d95",
+    Tools: "#b45309",
+};
 
 const skillGroups = [
     {
         title: "Frontend",
         icon: <FaCode />,
-        skills: [
-            "React", "Next.js", "Flutter", "HTML", "CSS", "JavaScript"
-        ],
+        skills: ["React", "Next.js", "Flutter", "HTML", "CSS", "JavaScript"],
     },
     {
         title: "Backend",
         icon: <FaServer />,
-        skills: [
-            "Java", "Python", "Spring Boot", "Flask", "MySQL", "SQLite"
-        ],
+        skills: ["Java", "Python", "Spring Boot", "Flask", "MySQL", "SQLite"],
     },
     {
         title: "Webentwicklung",
         icon: <FaDatabase />,
-        skills: [
-            "REST-APIs", "MVC-Architektur"
-        ],
+        skills: ["REST-APIs", "MVC-Architektur"],
     },
     {
         title: "Cloud & DevOps",
         icon: <FaCloud />,
-        skills: [
-            "Azure", "Docker", "GitHub", "Vercel", "Cloudpanel", "CI/CD-Grundlagen"
-        ],
+        skills: ["Azure", "Docker", "GitHub", "Vercel", "Cloudpanel", "CI/CD-Grundlagen"],
     },
     {
         title: "Datenanalyse",
         icon: <FaDatabase />,
-        skills: [
-            "Pandas", "NumPy", "Matplotlib", "Selenium", "BeautifulSoup"
-        ],
+        skills: ["Pandas", "NumPy", "Matplotlib", "Selenium", "BeautifulSoup"],
     },
     {
         title: "Machine Learning",
         icon: <FaRobot />,
-        skills: [
-            "TensorFlow", "PyTorch", "Keras", "Scikit-Learn"
-        ],
+        skills: ["TensorFlow", "PyTorch", "Keras", "Scikit-Learn"],
     },
     {
         title: "Tools",
         icon: <FaTools />,
-        skills: [
-            "VS Code", "IntelliJ", "PyCharm", "Postman", "Jira"
-        ],
+        skills: ["VS Code", "IntelliJ", "PyCharm", "Postman", "Jira"],
     },
 ];
 
@@ -97,13 +105,21 @@ export default function SectionSkills() {
                                         as="span"
                                         px={3}
                                         py={1.5}
-                                        bg="gray.900"
-                                        color="white"
+                                        bg={pastelColors[group.title]}
+                                        color={textColors[group.title]}
                                         fontSize="sm"
                                         borderRadius="xl"
                                         fontWeight={500}
                                         letterSpacing={0.2}
                                         boxShadow="sm"
+                                        border="1px solid #e2e8f0"
+                                        transition="all 0.2s"
+                                        _hover={{
+                                            boxShadow: "md",
+                                            bg: "#f0f0f0",
+                                            color: "#2d3748",
+                                            cursor: "pointer",
+                                        }}
                                     >
                                         {skill}
                                     </Box>
@@ -132,8 +148,15 @@ export default function SectionSkills() {
                                 borderRadius="md"
                                 fontWeight="500"
                                 fontSize="sm"
+                                bg="#e6fffa"
+                                color="#234e52"
+                                boxShadow="xs"
+                                border="1px solid #b2f5ea"
                             >
-                                {cert.label} – <Text as="span" color="teal.700">{cert.org}</Text>
+                                {cert.label}
+                                <Text as="span" color="#319795" fontWeight="normal" ml={1}>
+                                    – {cert.org}
+                                </Text>
                             </Badge>
                         </WrapItem>
                     ))}
