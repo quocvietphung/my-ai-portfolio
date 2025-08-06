@@ -9,7 +9,7 @@ export default function SectionContact() {
             </Text>
             <VStack alignItems="flex-start" gap={4}>
                 <Text fontSize="md">
-                    Für einen Einblick in meine <b>Projekte und Code-Beispiele</b> besuchen Sie mein{" "}
+                    Einen Einblick in meine <b>Projekte und Code-Beispiele</b> erhalten Sie auf{" "}
                     <Icon as={FaGithub} color="gray.700" boxSize={5} mb="-2px" />
                     <Link
                         href="https://github.com/quocvietphung"
@@ -21,13 +21,13 @@ export default function SectionContact() {
                         textDecoration="underline"
                         display="inline-block"
                     >
-                        GitHub-Profil
+                        meinem GitHub-Profil
                     </Link>
                     .
                 </Text>
 
                 <Text fontSize="md">
-                    Mein <b>Lebenslauf, Zertifikate und weitere Informationen</b> finden Sie auf{" "}
+                    Meinen <b>Lebenslauf, Zertifikate und weitere Informationen</b> finden Sie auf{" "}
                     <Icon as={FaLinkedin} color="#0077b5" boxSize={5} mb="-2px" />
                     <Link
                         href="https://www.linkedin.com/in/viet-phung-00b740168/"
