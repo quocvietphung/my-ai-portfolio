@@ -28,7 +28,7 @@ export default function Home() {
                 <Flex flex="1" align="flex-start" justify="center" pt="0" pb="0">
                     <ChatBox
                         prompt={prompt}
-                        onPromptHandled={() => setPrompt(null)}
+                        onPromptHandledAction={() => setPrompt(null)}
                     />
                 </Flex>
             </Flex>

@@ -26,10 +26,10 @@ function getSectionFromPrompt(prompt: string): string | null {
 
 type ChatBoxProps = {
     prompt?: string | null;
-    onPromptHandled?: () => void;
+    onPromptHandledAction?: () => void;
 };
 
-export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
+export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps) {
     const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
     const [loading, setLoading] = useState(false);
     const [showTopQuestion, setShowTopQuestion] = useState(false);
@@ -43,14 +43,12 @@ export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
             const promptSection = getSectionFromPrompt(prompt);
             if (promptSection) {
                 setActiveSection(promptSection);
-                setChatHistory([
-                    { role: "user", content: prompt }
-                ]);
+                setChatHistory([{ role: "user", content: prompt }]);
                 handleChat(prompt);
             } else {
                 handleChat(prompt);
             }
-            onPromptHandled?.();
+            onPromptHandledAction?.();
         }
         // eslint-disable-next-line
     }, [prompt]);
@@ -66,10 +64,7 @@ export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
             setShowTopQuestion(true);
             const timer = setTimeout(() => {
                 setShowTopQuestion(false);
-                setChatHistory([
-                    chatHistory[0],
-                    pendingAnswer
-                ]);
+                setChatHistory([chatHistory[0], pendingAnswer]);
                 setPendingAnswer(null);
             }, 1000);
             return () => clearTimeout(timer);
@@ -87,9 +82,7 @@ export default function ChatBox({ prompt, onPromptHandled }: ChatBoxProps) {
         setInput("");
         setActiveSection(key);
         const prompt = sectionDefaultPrompts[key] || key;
-        setChatHistory([
-            { role: "user", content: prompt }
-        ]);
+        setChatHistory([{ role: "user", content: prompt }]);
         handleChat(prompt);
     };
 
