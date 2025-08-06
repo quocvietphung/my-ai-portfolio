@@ -1,7 +1,7 @@
 "use client";
 
 import { memo } from "react";
-import { Box, Heading, Image, Text } from "@chakra-ui/react";
+import { Box, Image } from "@chakra-ui/react";
 
 const AvatarHeader = memo(() => (
     <Box position="relative" mb="1.5em" textAlign="center">
@@ -27,24 +27,6 @@ const AvatarHeader = memo(() => (
             zIndex={1}
             position="relative"
         />
-        <Heading
-            as="h1"
-            fontWeight="extrabold"
-            letterSpacing={1}
-            zIndex={2}
-            position="relative"
-        >
-            Viet Phung
-        </Heading>
-        <Text
-            color="#5f6368"
-            mb="1.2em"
-            fontSize="lg"
-            zIndex={2}
-            position="relative"
-        >
-            AI Consultant • Data Engineer • Softwareentwickler
-        </Text>
     </Box>
 ));
 

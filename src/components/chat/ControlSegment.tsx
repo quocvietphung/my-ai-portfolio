@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Box, Button, Flex, HStack, Input, IconButton } from "@chakra-ui/react";
 import { FiSend } from "react-icons/fi";
-import { sections } from "../constants/sections";
+import { sections } from "@/constants/sections";
 
 type ControlSegmentProps = {
     onSelect: (key: string) => void;

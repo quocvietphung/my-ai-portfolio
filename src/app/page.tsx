@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { Box, Flex } from "@chakra-ui/react";
-import ParticlesBackground from "@/components/ParticlesBackground";
-import AvatarHeader from "@/components/AvatarHeader";
-import ControlSegment from "@/components/ControlSegment";
-import ChatBox from "@/components/ChatBox";
+import ParticlesBackground from "@/components/chat/ParticlesBackground";
+import AvatarHeader from "@/components/chat/AvatarHeader";
+import ControlSegment from "@/components/chat/ControlSegment";
+import ChatBox from "@/components/chat/ChatBox";
 import { sectionDefaultPrompts } from "../constants/sections";
 
 export default function Home() {

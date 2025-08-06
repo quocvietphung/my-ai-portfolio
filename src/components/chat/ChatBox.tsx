@@ -5,9 +5,9 @@ import { FaRobot } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { Typewriter } from "react-simple-typewriter";
 
-import { ChatMessage, sendChatMessage } from "../services/chatService";
 import PersonalInfoRenderer from "./PersonalInfoRenderer";
-import { PERSONAL_INFO_KEYWORDS_BY_SECTION } from "../constants/sections"
+import { ChatMessage, sendChatMessage } from "@/services/chatService";
+import { PERSONAL_INFO_KEYWORDS_BY_SECTION } from "@/constants/sections";
 
 const MotionFlex = motion.create(Flex);
 
