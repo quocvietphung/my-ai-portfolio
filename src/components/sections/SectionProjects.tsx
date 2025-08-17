@@ -64,6 +64,7 @@ const projects: Project[] = [
         ],
         desc:
             "Komplette Umsetzung eines Systems zur Erkennung von Kreditkartenbetrug mit modernsten ML-Methoden. Inklusive Datenanalyse, Backend-Entwicklung (Flask API), Frontend (React Dashboard), Visualisierung (Matplotlib) und Echtzeit-Auswertung für Explainability.",
+        href: "https://github.com/quocvietphung/Risk-Vision-detector",
     },
     {
         title: "Objekterkennung mit Deep Learning (TensorFlow, CNN)",
@@ -83,7 +84,12 @@ const projects: Project[] = [
         title: "Annotation Tool für AI-Research",
         icon: FaRobot,
         time: "2021–2022",
-        tags: [{ label: "Java" }, { label: "Docker" }, { label: "Azure", icon: LuFileBadge }, { label: "OCR" }],
+        tags: [
+            { label: "Java" },
+            { label: "Docker" },
+            { label: "Azure", icon: LuFileBadge },
+            { label: "OCR" },
+        ],
         desc:
             "Mitentwicklung eines Annotation Tools für Computer Vision-Projekte (z.B. Automatisierung von Schadensbildern). Realisierung mit Java und Python, Docker, Azure, OCR-Integration und flexibler API für effiziente Datenpipelines.",
     },
@@ -106,7 +112,7 @@ export default function SectionProjects() {
     const chipColor = "var(--chakra-colors-teal-700)";
 
     return (
-        <Box px={{ base: 4, md: 6 }} py={{ base: 6, md: 8 }} maxW="1100px" mx="auto">
+        <Box px={{ base: 4, md: 6 }} py={{ base: 7, md: 9 }} maxW={{ base: "1100px", md: "1200px" }} mx="auto">
             <VStack align="start" gap={2} mb={6}>
                 <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" letterSpacing={-0.5}>
                     Projekte & Highlights
@@ -116,31 +122,52 @@ export default function SectionProjects() {
                 </Text>
             </VStack>
 
-            <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
+            {/* 2 cột: mobile 1, từ md trở lên là 2 */}
+            <SimpleGrid columns={{ base: 1, md: 2 }} gap={{ base: 5, md: 6 }}>
                 {projects.map((p) => (
                     <Box
                         key={p.title}
                         role="group"
+                        position="relative"
+                        overflow="hidden"
                         bgGradient="linear(to-br, white, gray.50)"
                         border="1px solid"
                         borderColor={cardBorder}
                         borderRadius="2xl"
-                        p={5}
+                        p={{ base: 5, md: 6 }}
                         boxShadow="sm"
-                        transition="all 0.25s ease"
-                        _hover={{ boxShadow: "lg", transform: "translateY(-2px)" }}
+                        transition="all 0.28s ease"
+                        _before={{
+                            content: '""',
+                            position: "absolute",
+                            inset: "-25%",
+                            bg: "radial-gradient(600px 300px at 80% 0%, rgba(56,189,248,0.18) 0%, rgba(56,189,248,0) 60%)",
+                            opacity: 0,
+                            transform: "scale(0.9)",
+                            filter: "blur(28px)",
+                            transition: "all .35s ease",
+                            pointerEvents: "none",
+                        }}
+                        _hover={{
+                            boxShadow: "xl",
+                            transform: "translateY(-3px)",
+                            _before: { opacity: 1, transform: "scale(1)" },
+                        }}
                     >
                         {/* Header */}
                         <HStack gap={3} mb={3} alignItems="center">
                             <Box
-                                as="span"
                                 bg={chipBg}
                                 color={chipColor}
                                 borderRadius="lg"
-                                p={2}
+                                p={2.5}
                                 display="inline-flex"
                                 alignItems="center"
                                 justifyContent="center"
+                                boxShadow="0 6px 22px rgba(13,110,253,0.08)"
+                                transform="translateZ(0)"
+                                transition="transform .25s ease"
+                                _groupHover={{ transform: "translateY(-2px) scale(1.05)" }}
                             >
                                 <Icon as={p.icon} boxSize={5} />
                             </Box>
@@ -155,13 +182,16 @@ export default function SectionProjects() {
                             </VStack>
 
                             {p.href && (
-                                <ChakraLink
-                                    href={p.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    _hover={{ textDecoration: "none" }}
-                                >
-                                    <Button size="sm" colorPalette="teal" variant="solid" gap={2}>
+                                <ChakraLink href={p.href} target="_blank" rel="noopener noreferrer" _hover={{ textDecoration: "none" }}>
+                                    <Button
+                                        size="sm"
+                                        colorPalette="teal"
+                                        variant="solid"
+                                        gap={2}
+                                        boxShadow="0 8px 18px rgba(16,185,129,0.18)"
+                                        _hover={{ transform: "translateY(-1px)" }}
+                                        transition="transform .2s ease"
+                                    >
                                         <span>View on GitHub</span>
                                         <FaExternalLinkAlt />
                                     </Button>
@@ -169,7 +199,7 @@ export default function SectionProjects() {
                             )}
                         </HStack>
 
-                        {/* Tags (v3: Tag slots) */}
+                        {/* Tags */}
                         <Wrap gap={2} mb={3}>
                             {p.tags.map((tag) => (
                                 <WrapItem key={`${p.title}-${tag.label}`}>
