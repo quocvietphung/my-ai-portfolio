@@ -1,4 +1,5 @@
 "use client";
+
 import { Box, Text, VStack, Wrap, WrapItem, Tag, Icon } from "@chakra-ui/react";
 import { FaRobot, FaLightbulb, FaQuestionCircle, FaRocket } from "react-icons/fa";
 
@@ -37,57 +38,86 @@ const exampleQuestions = [
 
 export default function SectionOther() {
     return (
-        <Box p={[4, 6]} maxW="800px" mx="auto">
-            <VStack gap={6} align="start">
-                <Text fontSize="2xl" fontWeight="bold" color="teal.700">
+        <Box
+            px={{ base: 4, md: 6 }}
+            py={{ base: 6, md: 8 }}
+            w="100%"
+            maxW={{ base: "100%", md: "1100px", lg: "1280px" }}
+            mx="auto"
+        >
+            <VStack align="start" gap={{ base: 5, md: 6 }}>
+                {/* Tiêu đề + mô tả */}
+                <Text
+                    fontSize={{ base: "2xl", md: "3xl" }}
+                    fontWeight="extrabold"
+                    letterSpacing="-0.02em"
+                    color="teal.700"
+                >
                     Willkommen im Portfolio!
                 </Text>
-                <Text fontSize="md" color="gray.800" lineHeight={1.8}>
-                    Dies ist mein interaktives Portfolio – du findest hier Infos zu meiner Person, Projekten, Hobbys und Kontaktmöglichkeiten.
+
+                <Text
+                    fontSize={{ base: "md", md: "lg" }}
+                    color="gray.800"
+                    lineHeight={1.85}
+                    maxW="85ch"
+                >
+                    Dies ist mein interaktives Portfolio – du findest hier Infos zu meiner
+                    Person, Projekten, Hobbys und Kontaktmöglichkeiten.
                     <br />
-                    <b>Besonderheit:</b> Dieses Portfolio ist mit <span style={{ color: "#0ea5e9" }}>AI</span> ausgestattet – du kannst jederzeit jede Frage im Chat stellen, ob zu Machine Learning, KI, Deep Learning, Karriere oder Alltag!
+                    <b>Besonderheit:</b> Dieses Portfolio ist mit{" "}
+                    <span style={{ color: "#0ea5e9" }}>AI</span> ausgestattet – du kannst
+                    jederzeit jede Frage im Chat stellen, ob zu Machine Learning, KI, Deep
+                    Learning, Karriere oder Alltag!
                     <br />
                     <br />
-                    <span style={{ color: "#6366f1", fontWeight: 600 }}>Danke fürs Vorbeischauen und viel Spaß beim Entdecken! ✨</span>
+                    <span style={{ color: "#6366f1", fontWeight: 600 }}>
+            Danke fürs Vorbeischauen und viel Spaß beim Entdecken! ✨
+          </span>
                 </Text>
-                <Box>
-                    <Text fontWeight={600} fontSize="lg" mb={2}>
+
+                {/* Gợi ý câu hỏi */}
+                <Box w="100%">
+                    <Text fontWeight={700} fontSize={{ base: "lg", md: "xl" }} mb={3}>
                         Probiere doch direkt ein paar Fragen aus:
                     </Text>
+
+                    {/* Wrap v3 dùng 'gap' để canh khoảng cách giữa các chip */}
                     <Wrap gap={3}>
                         {exampleQuestions.map((q) => (
                             <WrapItem key={q.label}>
                                 <Tag.Root
-                                    size="lg"
+                                    // v3: sử dụng Tag.Root + style props
                                     variant="subtle"
                                     borderRadius="full"
+                                    fontWeight={700}
+                                    fontSize={{ base: "sm", md: "md" }}
+                                    px={{ base: 3.5, md: 4 }}
+                                    py={{ base: 2, md: 2.5 }}
+                                    bg="gray.50"
+                                    color="gray.800"
+                                    boxShadow="0 2px 10px rgba(2, 6, 23, 0.06)"
+                                    _hover={{ bg: "teal.500", color: "white" }}
+                                    transition="all 0.18s ease"
                                     cursor="default"
-                                    fontWeight={600}
-                                    fontSize="md"
-                                    boxShadow="md"
-                                    bg="#f1f5f9"
-                                    color="teal.800"
-                                    minW="220px"
-                                    px={4}
-                                    py={2}
-                                    _hover={{
-                                        bg: "teal.400",
-                                        color: "white",
-                                    }}
-                                    transition="all 0.18s"
+                                    minW={{ base: "unset", md: "240px" }}
+                                    display="inline-flex"
+                                    alignItems="center"
                                     gap={2}
                                 >
                                     <Tag.StartElement>
-                                        <Icon as={q.icon} color={q.color} boxSize={5} />
+                                        <Icon as={q.icon} boxSize={5} color={q.color} />
                                     </Tag.StartElement>
-                                    <Tag.Label ml={1}>{q.label}</Tag.Label>
+                                    <Tag.Label lineHeight="1.2">{q.label}</Tag.Label>
                                 </Tag.Root>
                             </WrapItem>
                         ))}
                     </Wrap>
                 </Box>
+
                 <Text fontSize="sm" color="gray.500" pt={2}>
-                    Du kannst auch frei schreiben oder auf einen Bereich (Me, Skills, Projekte, Kontakt...) klicken, um mehr zu erfahren!
+                    Du kannst auch frei schreiben oder auf einen Bereich (Me, Skills,
+                    Projekte, Kontakt...) klicken, um mehr zu erfahren!
                 </Text>
             </VStack>
         </Box>
