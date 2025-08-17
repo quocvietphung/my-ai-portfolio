@@ -5,7 +5,6 @@ import {
     Box,
     Text,
     SimpleGrid,
-    HStack,
     VStack,
     Icon,
     Wrap,
@@ -21,7 +20,7 @@ import {
     FaGem,
     FaCreditCard,
     FaRobot,
-    FaTools,
+    FaMicrophone,
     FaSearch,
     FaExternalLinkAlt,
 } from "react-icons/fa";
@@ -39,6 +38,20 @@ type Project = {
 };
 
 const projects: Project[] = [
+    {
+        title: "Speak German – AI Pronunciation Trainer",
+        icon: FaMicrophone,
+        time: "2025",
+        tags: [
+            { label: "Next.js" },
+            { label: "Chakra UI" },
+            { label: "Whisper AI" },
+            { label: "TypeScript" },
+        ],
+        desc:
+            "Interaktive App zur Verbesserung der deutschen Aussprache. Nutzer lesen Sätze vor, die per Whisper AI transkribiert und mit dem Zieltext verglichen werden. Das System gibt Feedback zu Fehlern, bewertet die Genauigkeit in Prozent und bietet Tipps zur Verbesserung.",
+        href: "https://github.com/quocvietphung/speak-german",
+    },
     {
         title: "AI Chatbot Portfolio (Azure OpenAI GPT-3.5)",
         icon: FaRobot,
@@ -122,7 +135,6 @@ export default function SectionProjects() {
                 </Text>
             </VStack>
 
-            {/* 2 cột: base 1 → md 2 */}
             <SimpleGrid columns={{ base: 1, md: 2 }} gap={{ base: 5, md: 6 }}>
                 {projects.map((p) => (
                     <Box
@@ -154,12 +166,7 @@ export default function SectionProjects() {
                             _before: { opacity: 1, transform: "scale(1)" },
                         }}
                     >
-                        <Flex
-                            gap={3}
-                            mb={3}
-                            align="center"
-                            wrap="wrap"
-                        >
+                        <Flex gap={3} mb={3} align="center" wrap="wrap">
                             <Box
                                 bg={chipBg}
                                 color={chipColor}
@@ -176,12 +183,7 @@ export default function SectionProjects() {
                                 <Icon as={p.icon} boxSize={5} />
                             </Box>
 
-                            <VStack
-                                alignItems="flex-start"
-                                gap={0}
-                                flex="1"
-                                minW={0}
-                            >
+                            <VStack alignItems="flex-start" gap={0} flex="1" minW={0}>
                                 <Text
                                     fontSize="lg"
                                     fontWeight="semibold"
@@ -202,7 +204,7 @@ export default function SectionProjects() {
                                         href={p.href}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        display={{ base: "inline-flex", sm: "none" }} // ✅ chỉ hiện ở base
+                                        display={{ base: "inline-flex", sm: "none" }}
                                     >
                                         <IconButton
                                             aria-label="View on GitHub"
@@ -215,6 +217,7 @@ export default function SectionProjects() {
                                         </IconButton>
                                     </ChakraLink>
 
+                                    {/* Desktop: Button */}
                                     <ChakraLink
                                         href={p.href}
                                         target="_blank"
@@ -245,7 +248,12 @@ export default function SectionProjects() {
                         <Wrap gap={2} mb={3}>
                             {p.tags.map((tag) => (
                                 <WrapItem key={`${p.title}-${tag.label}`}>
-                                    <Tag.Root size="sm" colorPalette="teal" variant="subtle" borderRadius="full">
+                                    <Tag.Root
+                                        size="sm"
+                                        colorPalette="teal"
+                                        variant="subtle"
+                                        borderRadius="full"
+                                    >
                                         {tag.icon && (
                                             <Tag.StartElement>
                                                 <Icon as={tag.icon} boxSize={3.5} />
