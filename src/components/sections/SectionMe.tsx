@@ -29,7 +29,6 @@ export default function SectionMe() {
                 align={{ md: "center" }}
                 gap={{ base: 5, md: 7 }}
             >
-                {/* Avatar (Next/Image) */}
                 <Box
                     position="relative"
                     boxSize={{ base: "96px", md: "120px" }}
@@ -48,7 +47,6 @@ export default function SectionMe() {
                     />
                 </Box>
 
-                {/* Tên + subtitle + chips */}
                 <VStack align="start" gap={2} flex="1" minW={0}>
                     <Text
                         fontSize={{ base: "xl", md: "2xl" }}
@@ -81,7 +79,6 @@ export default function SectionMe() {
                 </VStack>
             </Flex>
 
-            {/* Giới thiệu */}
             <VStack
                 align="start"
                 gap={4}

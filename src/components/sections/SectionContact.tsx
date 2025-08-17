@@ -10,8 +10,8 @@ const LINKEDIN_HOVER = "#084d99";
 export default function SectionContact() {
     return (
         <Box
-            w="100%"                                      // chiếm toàn bộ chiều rộng khả dụng
-            maxW={{ base: "100%", md: "1100px", lg: "1280px", "2xl": "1440px" }} // tăng rộng
+            w="100%"
+            maxW={{ base: "100%", md: "1100px", lg: "1280px", "2xl": "1440px" }}
             mx="auto"
             p={{ base: 6, md: 8 }}
             bg="transparent"

@@ -1,4 +1,3 @@
-// src/sections/SectionFun.tsx
 import { Box, Text, Image, VStack, HStack, Icon } from "@chakra-ui/react";
 import { FaParachuteBox } from "react-icons/fa";
 import { MdSelfImprovement } from "react-icons/md";

@@ -46,7 +46,7 @@ export default function SectionOther() {
             mx="auto"
         >
             <VStack align="start" gap={{ base: 5, md: 6 }}>
-                {/* Tiêu đề + mô tả */}
+                {/* Title + description */}
                 <Text
                     fontSize={{ base: "2xl", md: "3xl" }}
                     fontWeight="extrabold"
@@ -76,18 +76,18 @@ export default function SectionOther() {
           </span>
                 </Text>
 
-                {/* Gợi ý câu hỏi */}
+                {/* Example questions */}
                 <Box w="100%">
                     <Text fontWeight={700} fontSize={{ base: "lg", md: "xl" }} mb={3}>
                         Probiere doch direkt ein paar Fragen aus:
                     </Text>
 
-                    {/* Wrap v3 dùng 'gap' để canh khoảng cách giữa các chip */}
+                    {/* Wrap v3 uses 'gap' to space chips */}
                     <Wrap gap={3}>
                         {exampleQuestions.map((q) => (
                             <WrapItem key={q.label}>
                                 <Tag.Root
-                                    // v3: sử dụng Tag.Root + style props
+                                    // v3: use Tag.Root + style props
                                     variant="subtle"
                                     borderRadius="full"
                                     fontWeight={700}

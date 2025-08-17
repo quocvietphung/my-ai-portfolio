@@ -23,12 +23,12 @@ const ParticlesBackground = () => {
                 number: { value: 60, density: { enable: true, area: 1200 } },
                 color: {
                     value: [
-                        "#a78bfa", // tím pastel
-                        "#38bdf8", // xanh pastel
-                        "#f472b6", // hồng pastel
-                        "#facc15", // vàng nhạt
-                        "#34d399", // xanh ngọc pastel
-                        "#fbbf24"  // vàng cam nhạt
+                        "#a78bfa", // pastel purple
+                        "#38bdf8", // pastel blue
+                        "#f472b6", // pastel pink
+                        "#facc15", // light yellow
+                        "#34d399", // pastel jade green
+                        "#fbbf24"  // light orange-yellow
                     ]
                 },
                 shape: { type: "circle" },
