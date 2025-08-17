@@ -13,6 +13,8 @@ import {
     Button,
     Link as ChakraLink,
     Tag,
+    Flex,
+    IconButton,
 } from "@chakra-ui/react";
 import type { IconType } from "react-icons";
 import {
@@ -84,12 +86,7 @@ const projects: Project[] = [
         title: "Annotation Tool für AI-Research",
         icon: FaRobot,
         time: "2021–2022",
-        tags: [
-            { label: "Java" },
-            { label: "Docker" },
-            { label: "Azure", icon: LuFileBadge },
-            { label: "OCR" },
-        ],
+        tags: [{ label: "Java" }, { label: "Docker" }, { label: "Azure", icon: LuFileBadge }, { label: "OCR" }],
         desc:
             "Mitentwicklung eines Annotation Tools für Computer Vision-Projekte (z.B. Automatisierung von Schadensbildern). Realisierung mit Java und Python, Docker, Azure, OCR-Integration und flexibler API für effiziente Datenpipelines.",
     },
@@ -112,7 +109,12 @@ export default function SectionProjects() {
     const chipColor = "var(--chakra-colors-teal-700)";
 
     return (
-        <Box px={{ base: 4, md: 6 }} py={{ base: 7, md: 9 }} maxW={{ base: "1100px", md: "1200px" }} mx="auto">
+        <Box
+            px={{ base: 4, md: 6 }}
+            py={{ base: 7, md: 9 }}
+            maxW={{ base: "1100px", md: "1200px" }}
+            mx="auto"
+        >
             <VStack align="start" gap={2} mb={6}>
                 <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" letterSpacing={-0.5}>
                     Projekte & Highlights
@@ -122,7 +124,7 @@ export default function SectionProjects() {
                 </Text>
             </VStack>
 
-            {/* 2 cột: mobile 1, từ md trở lên là 2 */}
+            {/* 2 cột: base 1 → md 2 */}
             <SimpleGrid columns={{ base: 1, md: 2 }} gap={{ base: 5, md: 6 }}>
                 {projects.map((p) => (
                     <Box
@@ -154,8 +156,12 @@ export default function SectionProjects() {
                             _before: { opacity: 1, transform: "scale(1)" },
                         }}
                     >
-                        {/* Header */}
-                        <HStack gap={3} mb={3} alignItems="center">
+                        <Flex
+                            gap={3}
+                            mb={3}
+                            align="center"
+                            wrap="wrap"
+                        >
                             <Box
                                 bg={chipBg}
                                 color={chipColor}
@@ -172,8 +178,18 @@ export default function SectionProjects() {
                                 <Icon as={p.icon} boxSize={5} />
                             </Box>
 
-                            <VStack alignItems="flex-start" gap={0} flex="1">
-                                <Text fontSize="lg" fontWeight="semibold" color={titleColor}>
+                            <VStack
+                                alignItems="flex-start"
+                                gap={0}
+                                flex="1"
+                                minW={0}
+                            >
+                                <Text
+                                    fontSize="lg"
+                                    fontWeight="semibold"
+                                    color={titleColor}
+                                    wordBreak="break-word"
+                                >
                                     {p.title}
                                 </Text>
                                 <Text fontSize="sm" color={timeColor}>
@@ -182,22 +198,50 @@ export default function SectionProjects() {
                             </VStack>
 
                             {p.href && (
-                                <ChakraLink href={p.href} target="_blank" rel="noopener noreferrer" _hover={{ textDecoration: "none" }}>
-                                    <Button
-                                        size="sm"
-                                        colorPalette="teal"
-                                        variant="solid"
-                                        gap={2}
-                                        boxShadow="0 8px 18px rgba(16,185,129,0.18)"
-                                        _hover={{ transform: "translateY(-1px)" }}
-                                        transition="transform .2s ease"
+                                <>
+                                    {/* Mobile: IconButton */}
+                                    <ChakraLink
+                                        href={p.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        display={{ base: "inline-flex", sm: "none" }} // ✅ chỉ hiện ở base
                                     >
-                                        <span>View on GitHub</span>
-                                        <FaExternalLinkAlt />
-                                    </Button>
-                                </ChakraLink>
+                                        <IconButton
+                                            aria-label="View on GitHub"
+                                            variant="subtle"
+                                            colorPalette="teal"
+                                            size="sm"
+                                            flexShrink={0}
+                                        >
+                                            <FaExternalLinkAlt />
+                                        </IconButton>
+                                    </ChakraLink>
+
+                                    <ChakraLink
+                                        href={p.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        _hover={{ textDecoration: "none" }}
+                                        display={{ base: "none", sm: "inline-flex" }}
+                                    >
+                                        <Button
+                                            size="sm"
+                                            colorPalette="teal"
+                                            variant="solid"
+                                            gap={2}
+                                            whiteSpace="nowrap"
+                                            flexShrink={0}
+                                            boxShadow="0 8px 18px rgba(16,185,129,0.18)"
+                                            _hover={{ transform: "translateY(-1px)" }}
+                                            transition="transform .2s ease"
+                                        >
+                                            <span>View on GitHub</span>
+                                            <FaExternalLinkAlt />
+                                        </Button>
+                                    </ChakraLink>
+                                </>
                             )}
-                        </HStack>
+                        </Flex>
 
                         {/* Tags */}
                         <Wrap gap={2} mb={3}>
