@@ -1,10 +1,30 @@
-import { Box, Text, Wrap, WrapItem, Stack, HStack, Icon, Badge } from "@chakra-ui/react";
-import {
-    FaCode, FaServer, FaCloud, FaDatabase, FaRobot, FaTools, FaCertificate
-} from "react-icons/fa";
+// src/sections/SectionSkills.tsx
+"use client";
 
-// Pastel color mapping for each skill group
-const pastelColors: Record<string, string> = {
+import {
+    Box,
+    Text,
+    Wrap,
+    WrapItem,
+    Stack,
+    HStack,
+    Icon,
+    Badge,
+    Separator,
+} from "@chakra-ui/react";
+import {
+    FaCode,
+    FaServer,
+    FaCloud,
+    FaDatabase,
+    FaRobot,
+    FaTools,
+    FaCertificate,
+} from "react-icons/fa";
+import type { IconType } from "react-icons";
+
+// Pastel màu cho từng nhóm kỹ năng
+const pastelBg: Record<string, string> = {
     Frontend: "#b2f5ea",
     Backend: "#bee3f8",
     Webentwicklung: "#fbb6ce",
@@ -14,7 +34,7 @@ const pastelColors: Record<string, string> = {
     Tools: "#fde68a",
 };
 
-const textColors: Record<string, string> = {
+const pastelFg: Record<string, string> = {
     Frontend: "#234e52",
     Backend: "#1a365d",
     Webentwicklung: "#97266d",
@@ -24,80 +44,92 @@ const textColors: Record<string, string> = {
     Tools: "#b45309",
 };
 
-const skillGroups = [
+type SkillGroup = {
+    title: string;
+    icon: IconType;
+    skills: string[];
+};
+
+const skillGroups: SkillGroup[] = [
     {
         title: "Frontend",
-        icon: <FaCode />,
+        icon: FaCode,
         skills: ["React", "Next.js", "Flutter", "HTML", "CSS", "JavaScript"],
     },
     {
         title: "Backend",
-        icon: <FaServer />,
+        icon: FaServer,
         skills: ["Java", "Python", "Spring Boot", "Flask", "MySQL", "SQLite"],
     },
     {
         title: "Webentwicklung",
-        icon: <FaDatabase />,
+        icon: FaDatabase,
         skills: ["REST-APIs", "MVC-Architektur"],
     },
     {
         title: "Cloud & DevOps",
-        icon: <FaCloud />,
-        skills: ["Azure", "Docker", "GitHub", "Vercel", "Cloudpanel", "CI/CD-Grundlagen"],
+        icon: FaCloud,
+        skills: ["Azure", "Docker", "GitHub", "Vercel", "Cloudpanel", "CI/CD"],
     },
     {
         title: "Datenanalyse",
-        icon: <FaDatabase />,
+        icon: FaDatabase,
         skills: ["Pandas", "NumPy", "Matplotlib", "Selenium", "BeautifulSoup"],
     },
     {
         title: "Machine Learning",
-        icon: <FaRobot />,
+        icon: FaRobot,
         skills: ["TensorFlow", "PyTorch", "Keras", "Scikit-Learn"],
     },
     {
         title: "Tools",
-        icon: <FaTools />,
+        icon: FaTools,
         skills: ["VS Code", "IntelliJ", "PyCharm", "Postman", "Jira"],
     },
 ];
 
 const certificates = [
-    {
-        label: "Azure Fundamentals AZ-900",
-        org: "Microsoft",
-    },
-    {
-        label: "Python Advanced",
-        org: "alfatraining Bildungszentrum",
-    },
-    {
-        label: "Certified Associate Python Programmer (PCAP)",
-        org: "Python Institute",
-    },
-    {
-        label: "Cloud Machine Learning Engineering & MLOps",
-        org: "Duke University (Coursera)",
-    },
-    {
-        label: "MLOps Internship Certificate",
-        org: "MotionsCloud",
-    },
+    { label: "Azure Fundamentals AZ-900", org: "Microsoft" },
+    { label: "Python Advanced", org: "alfatraining Bildungszentrum" },
+    { label: "Certified Associate Python Programmer (PCAP)", org: "Python Institute" },
+    { label: "Cloud Machine Learning Engineering & MLOps", org: "Duke University (Coursera)" },
+    { label: "MLOps Internship Certificate", org: "MotionsCloud" },
 ];
 
 export default function SectionSkills() {
     return (
-        <Box p={[4, 6]} maxW="900px" mx="auto">
-            <Text fontSize="2xl" fontWeight="bold" mb={7} letterSpacing={-0.5}>
-                Skills & Expertise
-            </Text>
+        <Box
+            maxW={{ base: "100%", md: "1180px", lg: "1280px" }}
+            mx="auto"
+            px={{ base: 4, md: 6 }}
+            py={{ base: 6, md: 8 }}
+            bg="white"
+        >
+            <HStack mb={6} gap={3} align="center">
+                <Icon as={FaCode} boxSize={6} color="teal.600" />
+                <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" letterSpacing={-0.5}>
+                    Skills &amp; Expertise
+                </Text>
+            </HStack>
+
             <Stack gap={7}>
                 {skillGroups.map((group) => (
                     <Box key={group.title}>
-                        <HStack mb={2} gap={2}>
-                            <Icon as={group.icon.type} boxSize={6} color="teal.600" />
-                            <Text fontSize="xl" fontWeight="semibold">{group.title}</Text>
+                        <HStack mb={2} gap={2} align="center">
+                            <Box
+                                bg="teal.50"
+                                color="teal.700"
+                                borderRadius="md"
+                                p={2}
+                                display="inline-flex"
+                            >
+                                <Icon as={group.icon} boxSize={5} />
+                            </Box>
+                            <Text fontSize="xl" fontWeight="semibold">
+                                {group.title}
+                            </Text>
                         </HStack>
+
                         <Wrap gap={3} pb={1}>
                             {group.skills.map((skill) => (
                                 <WrapItem key={skill}>
@@ -105,21 +137,13 @@ export default function SectionSkills() {
                                         as="span"
                                         px={3}
                                         py={1.5}
-                                        bg={pastelColors[group.title]}
-                                        color={textColors[group.title]}
+                                        bg={pastelBg[group.title]}
+                                        color={pastelFg[group.title]}
                                         fontSize="sm"
                                         borderRadius="xl"
-                                        fontWeight={500}
+                                        fontWeight={600}
                                         letterSpacing={0.2}
-                                        boxShadow="sm"
                                         border="1px solid #e2e8f0"
-                                        transition="all 0.2s"
-                                        _hover={{
-                                            boxShadow: "md",
-                                            bg: "#f0f0f0",
-                                            color: "#2d3748",
-                                            cursor: "pointer",
-                                        }}
                                     >
                                         {skill}
                                     </Box>
@@ -130,41 +154,41 @@ export default function SectionSkills() {
                 ))}
             </Stack>
 
-            <Box mt={9}>
-                <HStack mb={3} gap={2}>
-                    <Icon as={FaCertificate} boxSize={6} color="teal.500" />
-                    <Text fontSize="lg" fontWeight="semibold">
-                        Zertifikate
-                    </Text>
-                </HStack>
-                <Wrap gap={2}>
-                    {certificates.map(cert => (
-                        <WrapItem key={cert.label}>
-                            <Badge
-                                colorScheme="teal"
-                                variant="subtle"
-                                px={3}
-                                py={1}
-                                borderRadius="md"
-                                fontWeight="500"
-                                fontSize="sm"
-                                bg="#e6fffa"
-                                color="#234e52"
-                                boxShadow="xs"
-                                border="1px solid #b2f5ea"
-                            >
-                                {cert.label}
-                                <Text as="span" color="#319795" fontWeight="normal" ml={1}>
-                                    – {cert.org}
-                                </Text>
-                            </Badge>
-                        </WrapItem>
-                    ))}
-                </Wrap>
-            </Box>
+            <Separator my={{ base: 7, md: 8 }} />
+
+            <HStack mb={3} gap={2} align="center">
+                <Icon as={FaCertificate} boxSize={6} color="teal.600" />
+                <Text fontSize="lg" fontWeight="semibold">Zertifikate</Text>
+            </HStack>
+
+            <Wrap gap={2}>
+                {certificates.map((c) => (
+                    <WrapItem key={c.label}>
+                        <Badge
+                            colorPalette="teal"
+                            variant="subtle"
+                            px={3}
+                            py={1}
+                            borderRadius="md"
+                            fontWeight={600}
+                            fontSize="sm"
+                            bg="teal.50"
+                            color="teal.800"
+                            border="1px solid"
+                            borderColor="teal.100"
+                        >
+                            {c.label}
+                            <Text as="span" color="teal.600" fontWeight="normal" ml={1}>
+                                – {c.org}
+                            </Text>
+                        </Badge>
+                    </WrapItem>
+                ))}
+            </Wrap>
 
             <Text mt={8} color="gray.600" fontSize="md">
-                Hier findest du meine wichtigsten Kompetenzen – fokussiert auf moderne Entwicklung, Datenanalyse, KI und Cloud-Tools.<br />
+                Hier findest du meine wichtigsten Kompetenzen – fokussiert auf moderne Entwicklung, Datenanalyse, KI und Cloud-Tools.
+                <br />
                 <b>Was interessiert dich am meisten?</b>
             </Text>
         </Box>

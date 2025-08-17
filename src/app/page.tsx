@@ -1,9 +1,9 @@
+// app/page.tsx
 "use client";
 
 import { useState } from "react";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import ParticlesBackground from "@/components/chat/ParticlesBackground";
-import AvatarHeader from "@/components/chat/AvatarHeader";
 import ChatBox from "@/components/chat/ChatBox";
 import { sectionDefaultPrompts } from "@/constants/sections";
 
@@ -13,25 +13,20 @@ export default function Home() {
     return (
         <>
             <ParticlesBackground />
-            <Flex direction="column" minH="100vh" pos="relative" bg="transparent" zIndex={1}>
-                <Box
-                    w="min(700px, 90vw)"
-                    mx="auto"
-                    mt="40px"
-                    mb="0"
-                    display="flex"
-                    justifyContent="center"
-                    zIndex={1002}
-                >
-                    <AvatarHeader />
+            <Box
+                as="main"
+                minH="100svh"
+                display="grid"
+                placeItems="center"
+                px={{ base: 2, sm: 4, md: 6 }}
+                py={{ base: 4, md: 8 }}
+                pos="relative"
+                zIndex={1}
+            >
+                <Box w="100%" maxW={{ base: "100%", md: "980px", lg: "1200px" }}>
+                    <ChatBox prompt={prompt} onPromptHandledAction={() => setPrompt(null)} />
                 </Box>
-                <Flex flex="1" align="flex-start" justify="center" pt="0" pb="0">
-                    <ChatBox
-                        prompt={prompt}
-                        onPromptHandledAction={() => setPrompt(null)}
-                    />
-                </Flex>
-            </Flex>
+            </Box>
         </>
     );
 }

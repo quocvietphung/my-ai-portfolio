@@ -1,90 +1,148 @@
 // src/sections/SectionMe.tsx
+"use client";
+
 import Image from "next/image";
-import { Box, Flex, Text, Wrap, WrapItem } from "@chakra-ui/react";
+import {
+    Box,
+    Flex,
+    Text,
+    Wrap,
+    WrapItem,
+    Tag,
+    VStack,
+    HStack,
+} from "@chakra-ui/react";
 
 export default function SectionMe() {
     return (
-        <Box p={6}>
+        <Box
+            px={{ base: 4, md: 6 }}
+            py={{ base: 6, md: 8 }}
+            bgGradient="linear(to-br, white, gray.50)"
+            border="1px solid"
+            borderColor="gray.200"
+            borderRadius="2xl"
+            boxShadow="0 12px 48px rgba(2,32,71,.06)"
+        >
             <Flex
                 direction={{ base: "column", md: "row" }}
                 align={{ md: "center" }}
-                gap={6}
+                gap={{ base: 5, md: 7 }}
             >
-                {/* Avatar square with next/image */}
                 <Box
-                    overflow="hidden"
-                    boxSize="120px"
                     position="relative"
-                    boxShadow="0 4px 24px 0 rgba(0,0,0,0.09)"
+                    boxSize={{ base: "96px", md: "120px" }}
+                    flexShrink={0}
+                    borderRadius="xl"
+                    overflow="hidden"
+                    boxShadow="0 6px 22px rgba(0,0,0,0.12)"
                 >
                     <Image
                         src="/assets/avatar-viet.png"
                         alt="Viet Phung"
                         fill
+                        sizes="(min-width: 768px) 120px, 96px"
                         style={{ objectFit: "cover" }}
                         priority
                     />
                 </Box>
 
-                {/* Info */}
-                <Box>
-                    <Text fontSize="2xl" fontWeight="bold" letterSpacing={0.5}>
+                <VStack align="start" gap={2} flex="1" minW={0}>
+                    <Text
+                        fontSize={{ base: "xl", md: "2xl" }}
+                        fontWeight="extrabold"
+                        letterSpacing="-0.02em"
+                    >
                         Viet Phung
                     </Text>
-                    <Text color="gray.600" mb={4} fontSize="lg">
-                        AI Consultant&nbsp;·&nbsp;Software Engineer
-                    </Text>
+
+                    <HStack gap={2} color="fg.muted" fontSize={{ base: "sm", md: "md" }}>
+                        <Text as="span">AI Consultant</Text>
+                        <Text as="span">•</Text>
+                        <Text as="span">Software Engineer</Text>
+                    </HStack>
 
                     <Wrap gap={2}>
-                        {["AI", "Full-Stack", "Entrepreneur", "SaaS Creator"].map(
-                            (label) => (
-                                <WrapItem key={label}>
-                                    <Text
-                                        fontSize="sm"
-                                        px={3}
-                                        py={1}
-                                        borderRadius="full"
-                                        bg="teal.100"
-                                        color="teal.800"
-                                        fontWeight="semibold"
-                                        boxShadow="0 1px 4px 0 rgba(30,64,175,0.04)"
-                                    >
-                                        {label}
-                                    </Text>
-                                </WrapItem>
-                            )
-                        )}
+                        {["AI", "Full-Stack", "Entrepreneur", "SaaS Creator"].map((label) => (
+                            <WrapItem key={label}>
+                                <Tag.Root
+                                    size="sm"
+                                    colorPalette="teal"
+                                    variant="subtle"
+                                    borderRadius="full"
+                                >
+                                    <Tag.Label>{label}</Tag.Label>
+                                </Tag.Root>
+                            </WrapItem>
+                        ))}
                     </Wrap>
-                </Box>
+                </VStack>
             </Flex>
 
-            <Box mt={7} fontSize="lg" lineHeight={1.85} color="gray.800">
-                <Text as="span" fontWeight="semibold" fontSize="xl">
-                    Mein Name ist Viet&nbsp;
+            <VStack
+                align="start"
+                gap={4}
+                mt={{ base: 6, md: 7 }}
+                color="fg"
+                fontSize={{ base: "md", md: "lg" }}
+                lineHeight={1.85}
+            >
+                <Text>
+                    <Text as="span" fontWeight="semibold" fontSize={{ base: "lg", md: "xl" }}>
+                        Mein Name ist Viet{" "}
+                    </Text>
+                    <Text as="span" aria-hidden>
+                        🤖
+                    </Text>
+                    <Text as="span">
+                        {" "}
+                        – Softwareentwickler mit Herz für KI, neugierig und offen für neue
+                        Wege. Mein Lebensmittelpunkt ist Wuppertal, Deutschland.
+                    </Text>
                 </Text>
-                <span role="img" aria-label="AI">🤖</span>
-                <Text as="span">
-                    &nbsp;– Softwareentwickler mit Herz für KI, neugierig und offen für neue Wege. Mein Lebensmittelpunkt ist Wuppertal, Deutschland.
+
+                <Text>
+                    <Text as="span" aria-hidden>
+                        💻{" "}
+                    </Text>
+                    In den letzten Jahren habe ich als Software Engineer vielseitige
+                    Erfahrungen gesammelt. Ich bin dankbar für diese Möglichkeiten – für
+                    jedes Projekt, jedes Team, jede Herausforderung, die mich ein Stück
+                    weitergebracht haben.
                 </Text>
-                <br /><br />
 
-                <span role="img" aria-label="code">💻 </span>
-                In den letzten Jahren habe ich als Software Engineer vielseitige Erfahrungen gesammelt. <br />
-                Ich bin dankbar für diese Möglichkeiten – für jedes Projekt, jedes Team, jede Herausforderung, die mich ein Stück weitergebracht haben.<br /><br />
+                <Text>
+                    <Text as="span" aria-hidden>
+                        🚀{" "}
+                    </Text>
+                    Jetzt freue ich mich darauf, mein Wissen im Bereich Machine Learning
+                    und Künstliche Intelligenz weiter auszubauen. Mein Wunsch ist es,
+                    gemeinsam mit anderen Lösungen zu entwickeln, die den Alltag
+                    bereichern und echten Mehrwert schaffen.
+                </Text>
 
-                <span role="img" aria-label="rocket">🚀 </span>
-                Jetzt freue ich mich darauf, mein Wissen im Bereich Machine Learning und Künstliche Intelligenz weiter auszubauen. Mein Wunsch ist es, gemeinsam mit anderen Lösungen zu entwickeln, die den Alltag bereichern und echten Mehrwert schaffen.<br /><br />
+                <Text>
+                    <Text as="span" aria-hidden>
+                        💡{" "}
+                    </Text>
+                    Für mich stehen der offene Austausch, gemeinsames Lernen und
+                    gegenseitige Inspiration im Mittelpunkt. Ich glaube daran, dass
+                    Innovation aus Teamgeist und Begeisterung entsteht.
+                </Text>
 
-                <span role="img" aria-label="lightbulb">💡 </span>
-                Für mich stehen der offene Austausch, gemeinsames Lernen und gegenseitige Inspiration im Mittelpunkt. Ich glaube daran, dass Innovation aus Teamgeist und Begeisterung entsteht.<br /><br />
-
-                <span role="img" aria-label="life">🌱 </span>
-                Meine Auszeiten finde ich beim Reisen, in der Meditation <span role="img" aria-label="meditation">🧘‍♂️</span>, beim Zeichnen <span role="img" aria-label="paint">🎨</span> oder wenn ich neue Ideen in kleinen Videos <span role="img" aria-label="video">🎬</span> festhalte.<br /><br />
+                <Text>
+                    <Text as="span" aria-hidden>
+                        🌱{" "}
+                    </Text>
+                    Meine Auszeiten finde ich beim Reisen, in der Meditation 🧘‍♂️, beim
+                    Zeichnen 🎨 oder wenn ich neue Ideen in kleinen Videos 🎬 festhalte.
+                </Text>
 
                 <Text as="span" fontWeight="semibold" color="teal.600">
-                    Ich freue mich auf neue Kontakte, Inspiration und gemeinsame Projekte rund um KI!
+                    Ich freue mich auf neue Kontakte, Inspiration und gemeinsame Projekte
+                    rund um KI!
                 </Text>
-            </Box>
+            </VStack>
         </Box>
     );
 }
