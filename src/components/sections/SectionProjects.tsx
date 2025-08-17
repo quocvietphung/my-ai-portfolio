@@ -40,6 +40,20 @@ type Project = {
 
 const projects: Project[] = [
     {
+        title: "AI Chatbot Portfolio (Azure OpenAI GPT-3.5)",
+        icon: FaRobot,
+        time: "2025",
+        tags: [
+            { label: "Next.js" },
+            { label: "Chakra UI" },
+            { label: "Azure OpenAI" },
+            { label: "TypeScript" },
+        ],
+        desc:
+            "Interaktives Portfolio mit integriertem Chatbot, betrieben durch Azure OpenAI GPT-3.5. Besucher können Fragen zu Projekten, Skills oder CV direkt stellen und erhalten sofortige Antworten.",
+        href: "https://github.com/quocvietphung/my-ai-portfolio",
+    },
+    {
         title: "Diamantpreis-Prognose mit Machine Learning",
         icon: FaGem,
         time: "07.2025 – heute",
@@ -81,22 +95,6 @@ const projects: Project[] = [
         ],
         desc:
             "Implementierung und Training von Convolutional Neural Networks (CNN) für die Objekterkennung (u.a. Fahrzeugerkennung). Einsatz von TensorFlow, YOLO und Keras, inklusive umfassendem Hyperparameter-Tuning und Monitoring mit TensorBoard zur Optimierung von Genauigkeit und Robustheit. Anwendung von Explainable AI zur Modellinterpretation.",
-    },
-    {
-        title: "Annotation Tool für AI-Research",
-        icon: FaRobot,
-        time: "2021–2022",
-        tags: [{ label: "Java" }, { label: "Docker" }, { label: "Azure", icon: LuFileBadge }, { label: "OCR" }],
-        desc:
-            "Mitentwicklung eines Annotation Tools für Computer Vision-Projekte (z.B. Automatisierung von Schadensbildern). Realisierung mit Java und Python, Docker, Azure, OCR-Integration und flexibler API für effiziente Datenpipelines.",
-    },
-    {
-        title: "Weitere Projekte & Tools",
-        icon: FaTools,
-        time: "2022–2023",
-        tags: [{ label: "Spring Boot" }, { label: "CI/CD" }, { label: "Teamarbeit" }, { label: "ETL" }],
-        desc:
-            "Mitwirkung an Microservices (Spring Boot, Docker), Data Engineering (ETL-Pipelines), Cloud-Integration für AI-Lösungen sowie technische Doku und Wissenstransfer im Team.",
     },
 ];
 
