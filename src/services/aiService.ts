@@ -20,6 +20,26 @@ export interface AIInsights {
     topicsDiscussed: string[];
 }
 
+export interface ProjectRecommendation {
+    title: string;
+    reason: string;
+    relevanceScore: number;
+    highlights: string[];
+}
+
+export interface RecommendationsResult {
+    success: boolean;
+    recommendations: {
+        recommendedProjects: ProjectRecommendation[];
+        learningPath: string[];
+        nextQuestions: string[];
+    };
+    metadata?: {
+        generatedAt: string;
+        basedOn: number;
+    };
+}
+
 export interface InsightsResult {
     success: boolean;
     insights: AIInsights;
@@ -100,4 +120,43 @@ export function convertImageToBase64(file: File): Promise<string> {
         reader.onerror = reject;
         reader.readAsDataURL(file);
     });
+}
+
+// Get AI-powered project recommendations
+export async function getProjectRecommendations(
+    userInterests: string[],
+    conversationContext?: string,
+    technicalLevel?: string
+): Promise<RecommendationsResult> {
+    try {
+        const response = await fetch('/api/ai-recommendations', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userInterests,
+                conversationContext,
+                technicalLevel
+            })
+        });
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Project recommendations error:', error);
+        return {
+            success: false,
+            recommendations: {
+                recommendedProjects: [
+                    {
+                        title: "AI Chatbot Portfolio",
+                        reason: "Interaktives Portfolio mit Azure OpenAI",
+                        relevanceScore: 90,
+                        highlights: ["Conversational AI", "TypeScript", "Modern UI"]
+                    }
+                ],
+                learningPath: ["Erkunde die Projektdetails"],
+                nextQuestions: ["Wie funktioniert die AI-Integration?"]
+            }
+        };
+    }
 }

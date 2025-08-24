@@ -27,11 +27,12 @@ import { FaRobot } from "react-icons/fa";
 
 import PersonalInfoRenderer from "./PersonalInfoRenderer";
 import { ChatMessage, sendChatMessage, generateSmartQuestions, ChatContext } from "@/services/chatService";
-import { analyzeImage, getAIInsights, convertImageToBase64, AIInsights } from "@/services/aiService";
+import { analyzeImage, getAIInsights, convertImageToBase64, AIInsights, getProjectRecommendations, ProjectRecommendation } from "@/services/aiService";
 import {
     PERSONAL_INFO_KEYWORDS_BY_SECTION,
     sections,
     sectionDefaultPrompts,
+    CONTEXTUAL_SUGGESTIONS,
 } from "@/constants/sections";
 
 const MotionFlex = motion.create(Flex);
@@ -78,6 +79,7 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
     const [aiInsights, setAiInsights] = useState<AIInsights | null>(null);
     const [isAnalyzingImage, setIsAnalyzingImage] = useState(false);
     const [userInterests, setUserInterests] = useState<string[]>([]);
+    const [projectRecommendations, setProjectRecommendations] = useState<ProjectRecommendation[]>([]);
 
     useEffect(() => {
         if (prompt && prompt.trim()) {
@@ -220,6 +222,18 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
                     if (insights.success) {
                         setAiInsights(insights.insights);
                         setUserInterests(insights.insights.userInterests);
+                        
+                        // Get project recommendations based on insights
+                        if (insights.insights.userInterests.length > 0) {
+                            const recommendations = await getProjectRecommendations(
+                                insights.insights.userInterests,
+                                insights.insights.conversationSummary,
+                                insights.insights.technicalLevel
+                            );
+                            if (recommendations.success) {
+                                setProjectRecommendations(recommendations.recommendations.recommendedProjects);
+                            }
+                        }
                     }
                 } catch (error) {
                     console.error("Error getting AI insights:", error);
@@ -415,6 +429,40 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
                             <Text fontSize="xs" color="gray.600" mb={1} textAlign="center">
                                 🎯 AI-Analyse: {aiInsights.technicalLevel} • {aiInsights.topicsDiscussed.join(', ')}
                             </Text>
+                        </Box>
+                    )}
+
+                    {/* Project Recommendations */}
+                    {projectRecommendations.length > 0 && (
+                        <Box mb={3} px={2}>
+                            <Text fontSize="xs" color="gray.600" mb={2} textAlign="center">
+                                🤖 Empfohlene Projekte für dich:
+                            </Text>
+                            <HStack gap={2} flexWrap="wrap" justify="center" maxW="100%">
+                                {projectRecommendations.slice(0, 2).map((project, idx) => (
+                                    <Button
+                                        key={idx}
+                                        size="xs"
+                                        variant="outline"
+                                        colorPalette="green"
+                                        borderRadius="full"
+                                        fontSize="11px"
+                                        px={3}
+                                        maxW="200px"
+                                        overflow="hidden"
+                                        whiteSpace="nowrap"
+                                        textOverflow="ellipsis"
+                                        title={`${project.title}: ${project.reason}`}
+                                        onClick={() => {
+                                            const question = `Erzähl mir mehr über das ${project.title} Projekt`;
+                                            setInput(question);
+                                            handleChat(question);
+                                        }}
+                                    >
+                                        ⭐ {project.title}
+                                    </Button>
+                                ))}
+                            </HStack>
                         </Box>
                     )}
 
