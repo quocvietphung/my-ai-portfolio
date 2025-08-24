@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
     try {
         // Try to parse the request body as JSON
         body = await req.json();
-    } catch (err) {
+    } catch {
         // If parsing fails, return a 400 error with a message
         return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
     }

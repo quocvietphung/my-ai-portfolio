@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Typewriter } from "react-simple-typewriter";
-import { FiSend } from "react-icons/fi";
+import { FiSend, FiImage } from "react-icons/fi";
 import {
     LuUser,
     LuFolderKanban,
@@ -26,7 +26,8 @@ import {
 import { FaRobot } from "react-icons/fa";
 
 import PersonalInfoRenderer from "./PersonalInfoRenderer";
-import { ChatMessage, sendChatMessage } from "@/services/chatService";
+import { ChatMessage, sendChatMessage, generateSmartQuestions, ChatContext } from "@/services/chatService";
+import { analyzeImage, getAIInsights, convertImageToBase64, AIInsights } from "@/services/aiService";
 import {
     PERSONAL_INFO_KEYWORDS_BY_SECTION,
     sections,
@@ -71,6 +72,12 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
     const chatRef = useRef<HTMLDivElement>(null);
     const [input, setInput] = useState("");
     const [activeSection, setActiveSection] = useState<string>("me");
+    
+    // New AI-enhanced state
+    const [smartQuestions, setSmartQuestions] = useState<string[]>([]);
+    const [aiInsights, setAiInsights] = useState<AIInsights | null>(null);
+    const [isAnalyzingImage, setIsAnalyzingImage] = useState(false);
+    const [userInterests, setUserInterests] = useState<string[]>([]);
 
     useEffect(() => {
         if (prompt && prompt.trim()) {
@@ -133,16 +140,94 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
         void handleChat(nextPrompt);
     };
 
+    // Handle image upload and analysis
+    const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        // Check if it's an image
+        if (!file.type.startsWith('image/')) {
+            alert('Bitte wähle eine Bilddatei aus.');
+            return;
+        }
+
+        setIsAnalyzingImage(true);
+        try {
+            // Convert to base64
+            const base64 = await convertImageToBase64(file);
+            
+            // Analyze with AI
+            const result = await analyzeImage(undefined, base64, "Analysiere dieses Bild im Kontext meines Tech-Portfolios");
+            
+            if (result.success) {
+                // Add analysis to chat
+                const userMessage: ChatMessage = { role: "user", content: `[Bild hochgeladen: ${file.name}]` };
+                const aiMessage: ChatMessage = { role: "assistant", content: `🖼️ **Bildanalyse:**\n\n${result.analysis}` };
+                
+                setChatHistory(prev => [...prev, userMessage, aiMessage]);
+            } else {
+                alert('Fehler bei der Bildanalyse. Bitte versuche es erneut.');
+            }
+        } catch (error) {
+            console.error('Image upload error:', error);
+            alert('Fehler beim Verarbeiten des Bildes.');
+        }
+        setIsAnalyzingImage(false);
+        
+        // Reset input
+        event.target.value = '';
+    };
+
     const handleChat = async (userPrompt: string) => {
         setLoading(true);
         setShowTopQuestion(true);
         setPendingAnswer(null);
         setActiveSection(getSectionFromPrompt(userPrompt) || activeSection);
+        
         try {
-            const assistantMessage = await sendChatMessage(userPrompt);
+            // Build context for enhanced AI
+            const context: ChatContext = {
+                conversationHistory: chatHistory,
+                currentSection: activeSection,
+                userInterests: userInterests
+            };
+            
+            const assistantMessage = await sendChatMessage(userPrompt, context);
             setPendingAnswer(assistantMessage);
-        } catch {
-            setPendingAnswer({ role: "assistant", content: "Error: Could not get response." });
+            
+            // Update conversation history for context
+            const userMessage: ChatMessage = { role: "user", content: userPrompt };
+            const newHistory: ChatMessage[] = [...chatHistory, userMessage, assistantMessage];
+            
+            // Generate smart questions after response
+            if (newHistory.length >= 2) {
+                try {
+                    const questions = await generateSmartQuestions({
+                        conversationHistory: newHistory.slice(-4), // Last 2 exchanges
+                        currentSection: activeSection,
+                        userInterests: userInterests
+                    });
+                    setSmartQuestions(questions);
+                } catch (error) {
+                    console.error("Error generating smart questions:", error);
+                }
+            }
+            
+            // Get AI insights after a few exchanges
+            if (newHistory.length >= 4) {
+                try {
+                    const insights = await getAIInsights(newHistory);
+                    if (insights.success) {
+                        setAiInsights(insights.insights);
+                        setUserInterests(insights.insights.userInterests);
+                    }
+                } catch (error) {
+                    console.error("Error getting AI insights:", error);
+                }
+            }
+        } catch (error) {
+            console.error("Chat error:", error);
+            setPendingAnswer({ role: "assistant", content: "Entschuldigung, ich konnte keine Antwort generieren. Bitte versuche es erneut." });
         }
         setLoading(false);
     };
@@ -292,8 +377,72 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
                         </HStack>
                     </Flex>
 
-                    <Flex justify="center" px={{ base: 1, sm: 2 }}>
-                        <Box w={{ base: "95%", sm: "88%", md: "70%" }}>
+                    {/* Smart Questions Section */}
+                    {smartQuestions.length > 0 && (
+                        <Box mb={3} px={2}>
+                            <Text fontSize="xs" color="gray.600" mb={2} textAlign="center">
+                                💡 Empfohlene Fragen:
+                            </Text>
+                            <HStack gap={2} flexWrap="wrap" justify="center" maxW="100%">
+                                {smartQuestions.map((question, idx) => (
+                                    <Button
+                                        key={idx}
+                                        size="xs"
+                                        variant="outline"
+                                        colorPalette="blue"
+                                        borderRadius="full"
+                                        fontSize="11px"
+                                        px={3}
+                                        maxW="280px"
+                                        overflow="hidden"
+                                        whiteSpace="nowrap"
+                                        textOverflow="ellipsis"
+                                        onClick={() => {
+                                            setInput(question);
+                                            handleChat(question);
+                                        }}
+                                    >
+                                        {question}
+                                    </Button>
+                                ))}
+                            </HStack>
+                        </Box>
+                    )}
+
+                    {/* AI Insights Display */}
+                    {aiInsights && (
+                        <Box mb={3} px={2}>
+                            <Text fontSize="xs" color="gray.600" mb={1} textAlign="center">
+                                🎯 AI-Analyse: {aiInsights.technicalLevel} • {aiInsights.topicsDiscussed.join(', ')}
+                            </Text>
+                        </Box>
+                    )}
+
+                    <Flex justify="center" px={{ base: 1, sm: 2 }} gap={2}>
+                        {/* Hidden file input for image upload */}
+                        <input
+                            type="file"
+                            accept="image/*"
+                            style={{ display: 'none' }}
+                            id="image-upload"
+                            onChange={handleImageUpload}
+                        />
+                        
+                        {/* Image upload button */}
+                        <IconButton
+                            aria-label="Upload image"
+                            size="sm"
+                            variant="outline"
+                            colorPalette="purple"
+                            borderRadius="full"
+                            onClick={() => document.getElementById('image-upload')?.click()}
+                            disabled={isAnalyzingImage}
+                            title="Bild für AI-Analyse hochladen"
+                        >
+                            <FiImage />
+                        </IconButton>
+
+                        <Box w={{ base: "85%", sm: "78%", md: "65%" }}>
                             <InputGroup
                                 endElement={
                                     <IconButton
@@ -310,7 +459,7 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
                             >
                                 <Input
                                     aria-label="Chat input"
-                                    placeholder="Ask me anything..."
+                                    placeholder={isAnalyzingImage ? "Bild wird analysiert..." : "Ask me anything..."}
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}
                                     size="sm"
@@ -319,6 +468,7 @@ export default function ChatBox({ prompt, onPromptHandledAction }: ChatBoxProps)
                                     borderRadius="full"
                                     _focusVisible={{ outline: "none", boxShadow: "0 0 0 3px rgba(59,130,246,0.22)" }}
                                     fontSize="sm"
+                                    disabled={isAnalyzingImage}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") {
                                             e.preventDefault();
