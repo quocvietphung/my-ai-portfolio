@@ -89,7 +89,8 @@ const skillGroups: SkillGroup[] = [
 ];
 
 const certificates = [
-    { label: "Azure Fundamentals AZ-900", org: "Microsoft" },
+    { label: "Azure AI Engineer Associate (AZ-102)", org: "Microsoft" },
+    { label: "Azure Fundamentals (AZ-900)", org: "Microsoft" },
     { label: "Python Advanced", org: "alfatraining Bildungszentrum" },
     { label: "Certified Associate Python Programmer (PCAP)", org: "Python Institute" },
     { label: "Cloud Machine Learning Engineering & MLOps", org: "Duke University (Coursera)" },

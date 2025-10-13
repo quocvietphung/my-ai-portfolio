@@ -96,18 +96,19 @@ const projects: Project[] = [
         href: "https://github.com/quocvietphung/Risk-Vision-detector",
     },
     {
-        title: "Objekterkennung mit Deep Learning (TensorFlow, CNN)",
+        title: "Dokumentanalyse mit Azure AI Services (Java & Angular)",
         icon: FaSearch,
         time: "2025",
         tags: [
-            { label: "TensorFlow", icon: LuFileBadge },
-            { label: "YOLO" },
-            { label: "CNN" },
-            { label: "TensorBoard" },
-            { label: "Hyperparameter-Tuning" },
+            { label: "Azure AI Document Intelligence", icon: LuFileBadge },
+            { label: "Java Spring Boot" },
+            { label: "Angular" },
+            { label: "REST API" },
+            { label: "PDF & OCR" },
         ],
         desc:
-            "Implementierung und Training von Convolutional Neural Networks (CNN) für die Objekterkennung (u.a. Fahrzeugerkennung). Einsatz von TensorFlow, YOLO und Keras, inklusive umfassendem Hyperparameter-Tuning und Monitoring mit TensorBoard zur Optimierung von Genauigkeit und Robustheit. Anwendung von Explainable AI zur Modellinterpretation.",
+            "Entwicklung eines webbasierten Systems zur automatisierten Analyse und Extraktion von Informationen aus PDF-Dokumenten. Integration von Azure AI Document Intelligence (Form Recognizer) zur Texterkennung und strukturierten Datenausgabe. Umsetzung mit Java Spring Boot (Backend, REST API) und Angular (Frontend) für eine interaktive Benutzeroberfläche.",
+        href: "https://github.com/quocvietphung/document-analyzer",
     },
 ];
 

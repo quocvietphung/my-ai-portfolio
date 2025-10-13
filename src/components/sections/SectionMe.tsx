@@ -1,4 +1,3 @@
-// src/sections/SectionMe.tsx
 "use client";
 
 import Image from "next/image";
@@ -38,7 +37,7 @@ export default function SectionMe() {
                     boxShadow="0 6px 22px rgba(0,0,0,0.12)"
                 >
                     <Image
-                        src="/assets/avatar-viet.png"
+                        src="/assets/avatar-viet.jpeg"
                         alt="Viet Phung"
                         fill
                         sizes="(min-width: 768px) 120px, 96px"
@@ -63,7 +62,13 @@ export default function SectionMe() {
                     </HStack>
 
                     <Wrap gap={2}>
-                        {["AI", "Full-Stack", "Entrepreneur", "SaaS Creator"].map((label) => (
+                        {[
+                            "AI",
+                            "Full-Stack",
+                            "Cloud & Data",
+                            "Lifelong Learner",
+                            "SaaS Creator",
+                        ].map((label) => (
                             <WrapItem key={label}>
                                 <Tag.Root
                                     size="sm"
@@ -96,8 +101,9 @@ export default function SectionMe() {
                     </Text>
                     <Text as="span">
                         {" "}
-                        – Softwareentwickler mit Herz für KI, neugierig und offen für neue
-                        Wege. Mein Lebensmittelpunkt ist Wuppertal, Deutschland.
+                        – Associate Fullstack Software Engineer mit über drei Jahren Erfahrung in der Entwicklung moderner Web-, Cloud- und KI-Lösungen.
+                        Ich bin ein leidenschaftlicher Lerner und sehe mich als <b>lifelong learner</b>, der neugierig bleibt und immer offen für neue Technologien, Ideen und Perspektiven ist.
+                        Mein Lebensmittelpunkt ist Wuppertal, Deutschland.
                     </Text>
                 </Text>
 
@@ -106,19 +112,20 @@ export default function SectionMe() {
                         💻{" "}
                     </Text>
                     In den letzten Jahren habe ich als Software Engineer vielseitige
-                    Erfahrungen gesammelt. Ich bin dankbar für diese Möglichkeiten – für
-                    jedes Projekt, jedes Team, jede Herausforderung, die mich ein Stück
-                    weitergebracht haben.
+                    Erfahrungen gesammelt – von Web- und Cloud-Projekten bis hin zu
+                    Anwendungen im Bereich Künstliche Intelligenz und Machine Learning.
+                    Ich bin dankbar für jedes Projekt, jedes Team und jede Herausforderung,
+                    die mich ein Stück weitergebracht haben.
                 </Text>
 
                 <Text>
                     <Text as="span" aria-hidden>
                         🚀{" "}
                     </Text>
-                    Jetzt freue ich mich darauf, mein Wissen im Bereich Machine Learning
-                    und Künstliche Intelligenz weiter auszubauen. Mein Wunsch ist es,
-                    gemeinsam mit anderen Lösungen zu entwickeln, die den Alltag
-                    bereichern und echten Mehrwert schaffen.
+                    Jetzt freue ich mich darauf, mein Wissen im Bereich KI und
+                    Generative AI weiter auszubauen. Mein Ziel ist es, innovative Lösungen
+                    zu entwickeln, die den Alltag bereichern und echten Mehrwert schaffen –
+                    ob im Unternehmen, in der Forschung oder in kreativen Projekten.
                 </Text>
 
                 <Text>
@@ -140,7 +147,7 @@ export default function SectionMe() {
 
                 <Text as="span" fontWeight="semibold" color="teal.600">
                     Ich freue mich auf neue Kontakte, Inspiration und gemeinsame Projekte
-                    rund um KI!
+                    rund um KI und moderne Softwareentwicklung!
                 </Text>
             </VStack>
         </Box>
