@@ -94,60 +94,36 @@ export default function SectionMe() {
             >
                 <Text>
                     <Text as="span" fontWeight="semibold" fontSize={{ base: "lg", md: "xl" }}>
-                        Mein Name ist Viet{" "}
-                    </Text>
-                    <Text as="span" aria-hidden>
-                        🤖
-                    </Text>
-                    <Text as="span">
-                        {" "}
-                        – Associate Fullstack Software Engineer mit über drei Jahren Erfahrung in der Entwicklung moderner Web-, Cloud- und KI-Lösungen.
-                        Ich bin ein leidenschaftlicher Lerner und sehe mich als <b>lifelong learner</b>, der neugierig bleibt und immer offen für neue Technologien, Ideen und Perspektiven ist.
-                        Mein Lebensmittelpunkt ist Wuppertal, Deutschland.
-                    </Text>
+                        Mein Name ist Viet Phung.
+                    </Text>{" "}
+                    Ich bin ein Fullstack Software Engineer mit einer tiefen
+                    Leidenschaft für künstliche Intelligenz und moderne Softwareentwicklung.
+                    In meiner Arbeit verbinde ich analytisches Denken mit Kreativität – immer
+                    mit dem Ziel, Lösungen zu schaffen, die Sinn stiften und Menschen wirklich helfen.
                 </Text>
 
                 <Text>
-                    <Text as="span" aria-hidden>
-                        💻{" "}
-                    </Text>
-                    In den letzten Jahren habe ich als Software Engineer vielseitige
-                    Erfahrungen gesammelt – von Web- und Cloud-Projekten bis hin zu
-                    Anwendungen im Bereich Künstliche Intelligenz und Machine Learning.
-                    Ich bin dankbar für jedes Projekt, jedes Team und jede Herausforderung,
-                    die mich ein Stück weitergebracht haben.
+                    In den letzten Jahren durfte ich vielseitige Erfahrungen sammeln –
+                    von klassischen Webanwendungen bis zu komplexen Cloud- und KI-Projekten.
+                    Jedes Projekt war für mich nicht nur eine technische Herausforderung,
+                    sondern auch eine persönliche Reise: zu lernen, zu verstehen, und besser zu werden.
                 </Text>
 
                 <Text>
-                    <Text as="span" aria-hidden>
-                        🚀{" "}
-                    </Text>
-                    Jetzt freue ich mich darauf, mein Wissen im Bereich KI und
-                    Generative AI weiter auszubauen. Mein Ziel ist es, innovative Lösungen
-                    zu entwickeln, die den Alltag bereichern und echten Mehrwert schaffen –
-                    ob im Unternehmen, in der Forschung oder in kreativen Projekten.
+                    Technologie bedeutet für mich mehr als nur Code. Sie ist eine Sprache,
+                    mit der wir Ideen greifbar machen können – eine Brücke zwischen Logik und Emotion.
+                    Ich glaube daran, dass gute Software nicht nur funktioniert, sondern inspiriert.
                 </Text>
 
                 <Text>
-                    <Text as="span" aria-hidden>
-                        💡{" "}
-                    </Text>
-                    Für mich stehen der offene Austausch, gemeinsames Lernen und
-                    gegenseitige Inspiration im Mittelpunkt. Ich glaube daran, dass
-                    Innovation aus Teamgeist und Begeisterung entsteht.
-                </Text>
-
-                <Text>
-                    <Text as="span" aria-hidden>
-                        🌱{" "}
-                    </Text>
-                    Meine Auszeiten finde ich beim Reisen, in der Meditation 🧘‍♂️, beim
-                    Zeichnen 🎨 oder wenn ich neue Ideen in kleinen Videos 🎬 festhalte.
+                    Ich bin ein Mensch, der ständig lernt, reflektiert und neue Perspektiven sucht.
+                    Diese Offenheit hat mich hierhergeführt – in die Welt von KI, Cloud und Innovation.
+                    Heute lebe ich in Wuppertal und arbeite daran, die Zukunft ein Stück menschlicher zu gestalten.
                 </Text>
 
                 <Text as="span" fontWeight="semibold" color="teal.600">
-                    Ich freue mich auf neue Kontakte, Inspiration und gemeinsame Projekte
-                    rund um KI und moderne Softwareentwicklung!
+                    Ich freue mich auf inspirierende Gespräche, gemeinsame Projekte
+                    und den Austausch mit Menschen, die Technologie genauso lieben wie ich.
                 </Text>
             </VStack>
         </Box>
